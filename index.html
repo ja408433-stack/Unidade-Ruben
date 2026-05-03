@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidade Rúben</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:radial-gradient(circle at top,#312e81,#020617 70%);
+  color:white;
+}
+.app{max-width:1000px;margin:auto;padding:18px}
+.hero{
+  text-align:center;
+  padding:28px;
+  border-radius:25px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);
+  box-shadow:0 0 35px #38bdf8;
+}
+.hero h1{font-size:34px;margin:0;text-shadow:0 0 20px white}
+.control,.mission,.card,.champion{
+  background:rgba(15,23,42,.94);
+  border:2px solid #38bdf8;
+  border-radius:22px;
+  padding:18px;
+  margin:15px 0;
+  box-shadow:0 0 22px #2563eb;
+}
+input,select,button{
+  padding:12px;
+  margin:5px;
+  border-radius:12px;
+  border:none;
+}
+button{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+.gold{border-color:gold;box-shadow:0 0 25px gold}
+.silver{border-color:silver;box-shadow:0 0 20px silver}
+.bronze{border-color:#cd7f32;box-shadow:0 0 20px #cd7f32}
+.top-info{display:flex;align-items:center;gap:12px}
+.avatar{
+  width:65px;height:65px;border-radius:50%;
+  object-fit:cover;background:#334155;
+  border:3px solid #38bdf8;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+}
+.xpbar{
+  background:#1e293b;height:20px;border-radius:999px;
+  overflow:hidden;margin:12px 0;
+}
+.xpfill{
+  height:100%;
+  background:linear-gradient(90deg,#22c55e,#facc15,#ef4444);
+  transition:.7s;
+}
+.graph{
+  height:120px;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding:15px;
+  background:#020617;
+  border-radius:15px;
+  margin-top:15px;
+  position:relative;
+}
+.bar{
+  width:14px;
+  background:linear-gradient(to top,#22c55e,#38bdf8);
+  border-radius:8px 8px 0 0;
+  transition:.7s;
+}
+.photo-graph{
+  position:absolute;
+  top:5px;
+  right:10px;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:3px solid gold;
+  object-fit:cover;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header class="hero">
+    <h1>🎮🔥 UNIDADE RÚBEN 🔥🎮</h1>
+    <p>Campeonato Anual • XP de Honra</p>
+  </header>
+
+  <section class="control">
+    <input id="name" placeholder="Nome do participante">
+    <select id="role">
+      <option>Desbravador</option>
+      <option>Diretoria</option>
+    </select>
+    <button onclick="addPlayer()">➕ Adicionar</button>
+  </section>
+
+  <section class="mission">
+    <button onclick="gerarMissao()">🎯 Gerar Missão</button>
+    <h3 id="mission">Clique para sortear a missão</h3>
+  </section>
+
+  <h2>👑 Campeão Atual</h2>
+  <div id="champion"></div>
+
+  <h2>🏆 Ranking do Campeonato</h2>
+  <div id="ranking"></div>
+</div>
+
+<script>
+let players = JSON.parse(localStorage.getItem("players")) || [];
+
+function save(){
+  localStorage.setItem("players", JSON.stringify(players));
+}
+
+function som(){
+  new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3").play();
+}
+
+function addPlayer(){
+  const name = document.getElementById("name").value;
+  const role = document.getElementById("role").value;
+  if(!name) return alert("Digite um nome!");
+
+  players.push({name, role, points:0, history:[0], photo:null});
+  document.getElementById("name").value = "";
+  save();
+  render();
+}
+
+function uploadPhoto(index,file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    players[index].photo = reader.result;
+    save();
+    render();
+  };
+  reader.readAsDataURL(file);
+}
+
+function addPoints(index,value){
+  players[index].points += value;
+  if(players[index].points < 0) players[index].points = 0;
+  players[index].history.push(players[index].points);
+  som();
+  save();
+  render();
+}
+
+function gerarMissao(){
+  const missoes = [
+    "📖 Decorar um verso bíblico",
+    "🤝 Fazer uma boa ação",
+    "🏠 Ajudar em casa e relatar",
+    "🙏 Orar por um amigo",
+    "😎 Trazer visitante",
+    "🎤 Fazer o grito da unidade",
+    "🧠 Responder uma pergunta bíblica"
+  ];
+  document.getElementById("mission").innerText =
+    missoes[Math.floor(Math.random()*missoes.length)];
+}
+
+function nivel(points){
+  if(points <= 200) return "🥉 Iniciante";
+  if(points <= 400) return "🥈 Guerreiro";
+  return "👑 Elite Rúben";
+}
+
+function render(){
+  players.sort((a,b)=>b.points-a.points);
+
+  const champion = document.getElementById("champion");
+  const ranking = document.getElementById("ranking");
+
+  champion.innerHTML = players[0]
+    ? `<div class="champion">👑 <strong>${players[0].name}</strong><br>${players[0].points} XP • ${nivel(players[0].points)}</div>`
+    : "";
+
+  ranking.innerHTML = "";
+
+  players.forEach((p,i)=>{
+    let medal = i===0 ? "🥇" : i===1 ? "🥈" : i===2 ? "🥉" : "⚔️";
+    let classe = i===0 ? "gold" : i===1 ? "silver" : i===2 ? "bronze" : "";
+    let percent = Math.min((p.points/700)*100,100);
+
+    let bars = "";
+    p.history.forEach(v=>{
+      bars += `<div class="bar" style="height:${Math.max(v/2,8)}px"></div>`;
+    });
+
+    ranking.innerHTML += `
+      <div class="card ${classe}">
+        <div class="top-info">
+          ${p.photo ? `<img src="${p.photo}" class="avatar">` : `<div class="avatar">👤</div>`}
+          <div>
+            <h3>${medal} ${i+1}º - ${p.name}</h3>
+            <p>${p.role}</p>
+            <p><strong>${p.points} XP</strong> • ${nivel(p.points)}</p>
+          </div>
+        </div>
+
+        <input type="file" accept="image/*" onchange="uploadPhoto(${i}, this.files[0])">
+
+        <div class="xpbar">
+          <div class="xpfill" style="width:${percent}%"></div>
+        </div>
+
+        <div class="graph">
+          ${bars}
+          ${p.photo ? `<img src="${p.photo}" class="photo-graph">` : ""}
+        </div>
+
+        <button onclick="addPoints(${i},10)">+10 Presença</button>
+        <button onclick="addPoints(${i},15)">+15 Verso</button>
+        <button onclick="addPoints(${i},20)">+20 Visitante</button>
+        <button onclick="addPoints(${i},-5)">-5 Atraso</button>
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+</body>
+</html>
