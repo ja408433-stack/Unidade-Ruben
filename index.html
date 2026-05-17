@@ -7,395 +7,68 @@
   <link rel="icon" href="icon.png" />
   <link rel="apple-touch-icon" href="icon.png" />
   <meta name="theme-color" content="#0ea5e9" />
-
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { min-height: 100vh; background: radial-gradient(circle at top, #312e81, #020617 70%); color: #fff; padding: 16px; }
-    .app { max-width: 1100px; margin: auto; }
-    .hero { background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4); border-radius: 28px; padding: 22px; text-align: center; box-shadow: 0 0 35px #38bdf8; margin-bottom: 18px; }
-    .hero-top { display: grid; grid-template-columns: 88px 1fr 88px; gap: 12px; align-items: center; }
-    .hero-logo { width: 82px; height: 82px; border-radius: 20px; object-fit: cover; background: #0f172a; border: 3px solid #fff; box-shadow: 0 0 18px #fff; }
-    .hero h1 { font-size: 30px; text-shadow: 0 0 14px #000; }
-    .hero p { font-size: 16px; margin-top: 8px; }
-    .card { background: rgba(15, 23, 42, .94); border: 2px solid #38bdf8; border-radius: 22px; padding: 18px; box-shadow: 0 0 18px #38bdf855; margin-bottom: 16px; }
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    h2 { margin-bottom: 14px; color: #e0f2fe; }
-    input, select, textarea { width: 100%; padding: 13px; border: 0; border-radius: 13px; margin: 5px 0; font-size: 15px; outline: none; }
-    textarea { min-height: 72px; resize: vertical; }
-    button { border: 0; border-radius: 13px; padding: 12px 14px; font-weight: 800; color: white; background: linear-gradient(135deg, #22c55e, #16a34a); cursor: pointer; margin: 5px 4px 5px 0; box-shadow: 0 0 12px #22c55e66; }
-    .danger { background: #ef4444; box-shadow: none; }
-    .blue { background: #2563eb; }
-    .gold { background: #f59e0b; color: #111827; }
-    .admin-area { display: none; }
-    body.admin-on .admin-area { display: block; }
-    .small { font-size: 13px; opacity: .85; }
-    .premio { background: linear-gradient(135deg, #facc15, #f97316); color: #111827; border-radius: 18px; padding: 16px; text-align: center; font-weight: 900; font-size: 20px; }
-    .player, .task { display: grid; grid-template-columns: 78px 1fr auto; gap: 12px; background: #111827; border: 1px solid #38bdf866; border-radius: 16px; padding: 13px; margin: 10px 0; align-items: center; }
-    .avatar { width: 70px; height: 70px; border-radius: 18px; object-fit: cover; background: #0f172a; border: 2px solid #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 32px; overflow: hidden; }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .tag { font-size: 12px; background: #1e40af; border-radius: 999px; padding: 4px 8px; display: inline-block; margin: 3px 3px 0 0; }
-    .team { background: #7c3aed; }
-    .pending { background: #f59e0b; color: #111827; }
-    .ranking-bar { height: 16px; background: #0f172a; border-radius: 999px; overflow: hidden; margin-top: 8px; }
-    .fill { height: 100%; background: linear-gradient(90deg, #22c55e, #38bdf8, #facc15); transition: .5s; }
-    .champion { font-size: 22px; color: #facc15; font-weight: 900; }
-    .chart-row { margin: 12px 0; }
-    .chart-label { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; }
-    .preview-foto { width: 90px; height: 90px; border-radius: 18px; object-fit: cover; border: 2px solid #38bdf8; display: none; margin-top: 8px; }
-
-    @media (max-width: 800px) {
-      .grid, .hero-top, .player, .task { grid-template-columns: 1fr; }
-      .hero-logo { margin: auto; width: 72px; height: 72px; }
-      .hero h1 { font-size: 26px; }
-      .avatar { width: 88px; height: 88px; }
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}body{min-height:100vh;background:radial-gradient(circle at top,#312e81,#020617 70%);color:#fff;padding:16px}.app{max-width:1100px;margin:auto}.hero{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);border-radius:28px;padding:22px;text-align:center;box-shadow:0 0 35px #38bdf8;margin-bottom:18px}.hero-top{display:grid;grid-template-columns:88px 1fr 88px;gap:12px;align-items:center}.hero-logo{width:82px;height:82px;border-radius:20px;object-fit:cover;background:#0f172a;border:3px solid #fff;box-shadow:0 0 18px #fff}.hero h1{font-size:30px;text-shadow:0 0 14px #000}.hero p{font-size:16px;margin-top:8px}.card{background:rgba(15,23,42,.94);border:2px solid #38bdf8;border-radius:22px;padding:18px;box-shadow:0 0 18px #38bdf855;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}h2{margin-bottom:14px;color:#e0f2fe}input,select,textarea{width:100%;padding:13px;border:0;border-radius:13px;margin:5px 0;font-size:15px;outline:none}textarea{min-height:72px;resize:vertical}button{border:0;border-radius:13px;padding:12px 14px;font-weight:800;color:white;background:linear-gradient(135deg,#22c55e,#16a34a);cursor:pointer;margin:5px 4px 5px 0;box-shadow:0 0 12px #22c55e66}.danger{background:#ef4444;box-shadow:none}.blue{background:#2563eb}.gold{background:#f59e0b;color:#111827}.admin-area{display:none}body.admin-on .admin-area{display:block}body.admin-on .desbravador-area{display:none}.small{font-size:13px;opacity:.85}.premio{background:linear-gradient(135deg,#facc15,#f97316);color:#111827;border-radius:18px;padding:16px;text-align:center;font-weight:900;font-size:20px}.player,.task{display:grid;grid-template-columns:78px 1fr auto;gap:12px;background:#111827;border:1px solid #38bdf866;border-radius:16px;padding:13px;margin:10px 0;align-items:center}.avatar{width:70px;height:70px;border-radius:18px;object-fit:cover;background:#0f172a;border:2px solid #38bdf8;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.tag{font-size:12px;background:#1e40af;border-radius:999px;padding:4px 8px;display:inline-block;margin:3px 3px 0 0}.team{background:#7c3aed}.pending{background:#f59e0b;color:#111827}.extra{background:#ec4899}.ranking-bar{height:16px;background:#0f172a;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22c55e,#38bdf8,#facc15);transition:.5s}.champion{font-size:22px;color:#facc15;font-weight:900}.chart-row{margin:12px 0}.chart-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}.preview-foto{width:90px;height:90px;border-radius:18px;object-fit:cover;border:2px solid #38bdf8;display:none;margin-top:8px}@media(max-width:800px){.grid,.hero-top,.player,.task{grid-template-columns:1fr}.hero-logo{margin:auto;width:72px;height:72px}.hero h1{font-size:26px}.avatar{width:88px;height:88px}}
   </style>
 </head>
 <body>
   <main class="app">
-    <section class="hero">
-      <div class="hero-top">
-        <img class="hero-logo" src="logo-clube.png" alt="Logo do Clube" onerror="this.style.display='none'">
-        <div>
-          <h1>🎮🔥 UNIDADE RÚBEM 🔥🎮</h1>
-          <p>Campeonato Anual • XP de Honra • Ranking Gamer</p>
-        </div>
-        <img class="hero-logo" src="logo-unidade.png" alt="Logo da Unidade" onerror="this.style.display='none'">
-      </div>
-    </section>
+    <section class="hero"><div class="hero-top"><img class="hero-logo" src="logo-clube.png" alt="Logo do Clube" onerror="this.style.display='none'"><div><h1>🎮🔥 UNIDADE RÚBEM 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Gamer</p></div><img class="hero-logo" src="logo-unidade.png" alt="Logo da Unidade" onerror="this.style.display='none'"></div></section>
 
-    <section class="card">
-      <h2>🔐 Acesso</h2>
-      <div class="grid">
-        <select id="tipoLogin">
-          <option value="desbravador">Desbravador</option>
-          <option value="admin">Administrador</option>
-        </select>
-        <input id="senhaAdmin" type="password" placeholder="Senha do administrador" />
-      </div>
-      <button onclick="entrar()">Entrar</button>
-      <button class="danger" onclick="sairAdmin()">Sair do Admin</button>
-      <p class="small">Senha padrão do administrador: <b>ruben123</b></p>
-    </section>
+    <section class="card"><h2>🔐 Acesso</h2><div class="grid"><select id="tipoLogin"><option value="desbravador">Desbravador</option><option value="admin">Administrador</option></select><input id="senhaAdmin" type="password" placeholder="Senha do administrador" /></div><button onclick="entrar()">Entrar</button><button class="danger" onclick="sairAdmin()">Sair do Admin</button><p class="small">Senha padrão do administrador: <b>ruben123</b></p></section>
 
-    <section class="grid">
-      <section class="card admin-area">
-        <h2>➕ Cadastrar Desbravador</h2>
-        <input id="nomeDesbravador" placeholder="Nome do desbravador" />
-        <select id="equipeDesbravador">
-          <option>Equipe Azul</option>
-          <option>Equipe Laranja</option>
-          <option>Equipe Verde</option>
-          <option>Equipe Vermelha</option>
-          <option>Equipe Amarela</option>
-        </select>
-        <select id="cargoDesbravador">
-          <option>Desbravador</option>
-          <option>Conselheiro</option>
-          <option>Diretoria</option>
-          <option>Apoio</option>
-        </select>
-        <label class="small">Foto do desbravador:</label>
-        <input id="fotoDesbravador" type="file" accept="image/*" onchange="mostrarPreviewFoto()" />
-        <img id="previewFoto" class="preview-foto" alt="Prévia da foto">
-        <button onclick="cadastrarDesbravador()">Cadastrar Desbravador</button>
-      </section>
+    <section class="grid"><section class="card admin-area"><h2>➕ Cadastrar Desbravador</h2><input id="nomeDesbravador" placeholder="Nome do desbravador" /><select id="equipeDesbravador"><option>Equipe Azul</option><option>Equipe Laranja</option><option>Equipe Verde</option><option>Equipe Vermelha</option><option>Equipe Amarela</option></select><select id="cargoDesbravador"><option>Desbravador</option><option>Conselheiro</option><option>Diretoria</option><option>Apoio</option></select><label class="small">Foto do desbravador:</label><input id="fotoDesbravador" type="file" accept="image/*" onchange="mostrarPreviewFoto()" /><img id="previewFoto" class="preview-foto" alt="Prévia da foto"><button onclick="cadastrarDesbravador()">Cadastrar Desbravador</button></section><section class="card"><h2>🏆 Premiação do Mês</h2><div class="premio" id="premioMes"></div><p class="small" style="margin-top:10px">O prêmio vai para quem tiver mais pontos no mês.</p></section></section>
 
-      <section class="card">
-        <h2>🏆 Premiação do Mês</h2>
-        <div class="premio" id="premioMes"></div>
-        <p class="small" style="margin-top:10px">O prêmio vai para quem tiver mais pontos no mês.</p>
-      </section>
-    </section>
+    <section class="card desbravador-area"><h2>✅ Enviar tarefa feita para aprovação</h2><p class="small">Somente os desbravadores enviam tarefas realizadas. O administrador aprova e libera os pontos.</p><div class="grid"><select id="desbravadorTarefa"></select><select id="tipoTarefa"></select></div><textarea id="provaTarefa" placeholder="Escreva uma observação/prova. Exemplo: fiz atividade do caderno, participei do evento, vendi marmitas..."></textarea><button onclick="enviarTarefa()">Enviar para aprovação</button></section>
 
-    <section class="card">
-      <h2>✅ Tarefas Automáticas</h2>
-      <p class="small">Todos podem enviar tarefas. O administrador aprova e os pontos entram automaticamente.</p>
-      <div class="grid">
-        <select id="desbravadorTarefa"></select>
-        <select id="tipoTarefa"></select>
-      </div>
-      <textarea id="provaTarefa" placeholder="Escreva uma observação. Exemplo: fiz atividade do caderno, participei do evento, vendi marmitas..."></textarea>
-      <button onclick="enviarTarefa()">Enviar tarefa para aprovação</button>
-    </section>
+    <section class="card"><h2>🔥 Tarefas extras dos administradores</h2><p class="small">Tarefas especiais valendo pontuação máxima. Os desbravadores podem cumprir e enviar para aprovação.</p><div id="tarefasExtrasAtivas"></div></section>
 
-    <section class="card admin-area">
-      <h2>📥 Tarefas Pendentes</h2>
-      <div id="tarefasPendentes"></div>
-    </section>
+    <section class="card admin-area"><h2>🎲 Criar tarefa extra aleatória</h2><p class="small">O administrador cria desafios especiais para a unidade. Valem pontuação máxima.</p><div class="grid"><input id="tituloExtra" placeholder="Título da tarefa extra"><input id="pontosExtra" type="number" value="50" placeholder="Pontuação máxima"></div><textarea id="descricaoExtra" placeholder="Descrição da tarefa extra"></textarea><button class="gold" onclick="gerarTarefaAleatoria()">Gerar tarefa aleatória</button><button onclick="criarTarefaExtra()">Publicar tarefa extra</button><div id="extrasAdmin"></div></section>
 
-    <section class="card admin-area">
-      <h2>🎯 Lançar Pontuação Manual</h2>
-      <div class="grid">
-        <select id="desbravadorPontuacao"></select>
-        <select id="tipoPontuacao"></select>
-      </div>
-      <input id="observacaoPontuacao" placeholder="Observação do administrador" />
-      <button onclick="lancarPontuacaoManual()">Adicionar Pontos</button>
-      <button class="danger" onclick="zerarMes()">Zerar Pontos do Mês</button>
-    </section>
+    <section class="card admin-area"><h2>📥 Tarefas Pendentes para Aprovação</h2><div id="tarefasPendentes"></div></section>
 
-    <section class="card">
-      <h2>📊 Gráfico de Pontos</h2>
-      <div id="grafico"></div>
-    </section>
+    <section class="card admin-area"><h2>🎯 Lançar Pontuação Manual</h2><div class="grid"><select id="desbravadorPontuacao"></select><select id="tipoPontuacao"></select></div><input id="observacaoPontuacao" placeholder="Observação do administrador" /><button onclick="lancarPontuacaoManual()">Adicionar Pontos</button><button class="danger" onclick="zerarMes()">Zerar Pontos do Mês</button></section>
 
-    <section class="card">
-      <h2>🥇 Líder Atual</h2>
-      <div id="liderAtual" class="champion">Ainda sem pontuação</div>
-    </section>
-
-    <section class="card">
-      <h2>🏅 Ranking Geral</h2>
-      <div id="ranking"></div>
-    </section>
-
-    <section class="card">
-      <h2>👥 Ranking por Equipes</h2>
-      <div id="rankingEquipes"></div>
-    </section>
-
-    <section class="card">
-      <h2>📜 Histórico</h2>
-      <div id="historico"></div>
-    </section>
+    <section class="card"><h2>📊 Gráfico de Pontos</h2><div id="grafico"></div></section><section class="card"><h2>🥇 Líder Atual</h2><div id="liderAtual" class="champion">Ainda sem pontuação</div></section><section class="card"><h2>🏅 Ranking Geral</h2><div id="ranking"></div></section><section class="card"><h2>👥 Ranking por Equipes</h2><div id="rankingEquipes"></div></section><section class="card"><h2>📜 Histórico</h2><div id="historico"></div></section>
   </main>
 
   <script>
-    let desbravadores = JSON.parse(localStorage.getItem('rubem_desbravadores_v2')) || [];
-    let tarefas = JSON.parse(localStorage.getItem('rubem_tarefas_v2')) || [];
-    let historico = JSON.parse(localStorage.getItem('rubem_historico_v2')) || [];
-    let admins = JSON.parse(localStorage.getItem('rubem_admins_v2')) || [{ nome: 'Administrador Principal', senha: 'ruben123' }];
-    let adminAtivo = false;
-    let fotoTemporaria = '';
-
-    const premios = ['Arganel', 'Sorvete para a unidade', 'Chocolate', 'Caixa de bombom', 'Medalha simbólica', 'Brinde surpresa'];
-
-    const tiposPontuacao = [
-      { nome: 'Presença na reunião', pontos: 10 },
-      { nome: 'Atividade do caderno de classe', pontos: 15 },
-      { nome: 'Participação em evento', pontos: 20 },
-      { nome: 'Venda de marmitas', pontos: 25 },
-      { nome: 'Bom comportamento', pontos: 15 },
-      { nome: 'Participação nas atividades', pontos: 15 },
-      { nome: 'Ajuda na unidade', pontos: 20 },
-      { nome: 'Verso bíblico decorado', pontos: 10 },
-      { nome: 'Destaque especial', pontos: 30 },
-      { nome: 'Atraso / falta de compromisso', pontos: -10 }
-    ];
-
-    const niveis = [
-      { nome: 'Iniciante', pontos: 0, emoji: '🌱' },
-      { nome: 'Bronze', pontos: 50, emoji: '🥉' },
-      { nome: 'Ouro', pontos: 120, emoji: '🥇' },
-      { nome: 'Platina', pontos: 220, emoji: '💠' },
-      { nome: 'Diamante', pontos: 350, emoji: '💎' },
-      { nome: 'Conquistador de Honra', pontos: 500, emoji: '🏆' },
-      { nome: 'Mestre da Unidade', pontos: 700, emoji: '👑' }
-    ];
-
-    function salvar() {
-      localStorage.setItem('rubem_desbravadores_v2', JSON.stringify(desbravadores));
-      localStorage.setItem('rubem_tarefas_v2', JSON.stringify(tarefas));
-      localStorage.setItem('rubem_historico_v2', JSON.stringify(historico));
-      localStorage.setItem('rubem_admins_v2', JSON.stringify(admins));
-    }
-
-    function mostrarPreviewFoto() {
-      const arquivo = document.getElementById('fotoDesbravador').files[0];
-      const preview = document.getElementById('previewFoto');
-      fotoTemporaria = '';
-      preview.style.display = 'none';
-
-      if (!arquivo) return;
-      const leitor = new FileReader();
-      leitor.onload = function(e) {
-        fotoTemporaria = e.target.result;
-        preview.src = fotoTemporaria;
-        preview.style.display = 'block';
-      };
-      leitor.readAsDataURL(arquivo);
-    }
-
-    function entrar() {
-      const tipo = document.getElementById('tipoLogin').value;
-      const senha = document.getElementById('senhaAdmin').value.trim();
-      if (tipo === 'admin') {
-        const ok = admins.some(a => a.senha === senha);
-        if (!ok) return alert('Senha de administrador incorreta.');
-        adminAtivo = true;
-        document.body.classList.add('admin-on');
-      } else {
-        adminAtivo = false;
-        document.body.classList.remove('admin-on');
-      }
-      renderizar();
-    }
-
-    function sairAdmin() {
-      adminAtivo = false;
-      document.body.classList.remove('admin-on');
-      renderizar();
-    }
-
-    function cadastrarDesbravador() {
-      const nome = document.getElementById('nomeDesbravador').value.trim();
-      const equipe = document.getElementById('equipeDesbravador').value;
-      const cargo = document.getElementById('cargoDesbravador').value;
-
-      if (!nome) return alert('Digite o nome do desbravador.');
-
-      desbravadores.push({
-        id: Date.now(),
-        nome,
-        equipe,
-        cargo,
-        foto: fotoTemporaria,
-        pontosMes: 0,
-        pontosTotal: 0
-      });
-
-      document.getElementById('nomeDesbravador').value = '';
-      document.getElementById('fotoDesbravador').value = '';
-      document.getElementById('previewFoto').style.display = 'none';
-      fotoTemporaria = '';
-
-      salvar();
-      renderizar();
-      alert('Desbravador cadastrado com sucesso!');
-    }
-
-    function nivelDe(pontos) {
-      let atual = niveis[0];
-      let proximo = null;
-      for (let i = 0; i < niveis.length; i++) {
-        if (pontos >= niveis[i].pontos) atual = niveis[i];
-        else { proximo = niveis[i]; break; }
-      }
-      return { atual, proximo };
-    }
-
-    function textoProximoNivel(pontos) {
-      const n = nivelDe(pontos);
-      if (!n.proximo) return 'Nível máximo alcançado';
-      return `${n.proximo.pontos - pontos} pts para ${n.proximo.nome}`;
-    }
-
-    function aplicarPontos(id, pontos, motivo, obs) {
-      const d = desbravadores.find(x => x.id === Number(id));
-      if (!d) return alert('Desbravador não encontrado.');
-      d.pontosMes = Math.max(0, (d.pontosMes || 0) + pontos);
-      d.pontosTotal = Math.max(0, (d.pontosTotal || 0) + pontos);
-      historico.unshift({ nome: d.nome, pontos, motivo, obs: obs || '', data: new Date().toLocaleString('pt-BR') });
-      salvar();
-      renderizar();
-    }
-
-    function lancarPontuacaoManual() {
-      const id = document.getElementById('desbravadorPontuacao').value;
-      const idx = Number(document.getElementById('tipoPontuacao').value);
-      const obs = document.getElementById('observacaoPontuacao').value.trim();
-      if (!id) return alert('Escolha um desbravador.');
-      aplicarPontos(id, tiposPontuacao[idx].pontos, tiposPontuacao[idx].nome, obs);
-      document.getElementById('observacaoPontuacao').value = '';
-    }
-
-    function enviarTarefa() {
-      const id = document.getElementById('desbravadorTarefa').value;
-      const idx = Number(document.getElementById('tipoTarefa').value);
-      const prova = document.getElementById('provaTarefa').value.trim();
-      const d = desbravadores.find(x => x.id === Number(id));
-      if (!d) return alert('Escolha seu nome.');
-      if (!prova) return alert('Escreva uma observação da tarefa.');
-
-      tarefas.unshift({
-        id: Date.now(),
-        desbravadorId: d.id,
-        nome: d.nome,
-        tipo: tiposPontuacao[idx].nome,
-        pontos: tiposPontuacao[idx].pontos,
-        prova,
-        status: 'pendente',
-        data: new Date().toLocaleString('pt-BR')
-      });
-
-      document.getElementById('provaTarefa').value = '';
-      salvar();
-      renderizar();
-      alert('Tarefa enviada para aprovação!');
-    }
-
-    function aprovarTarefa(tarefaId) {
-      const t = tarefas.find(x => x.id === Number(tarefaId));
-      if (!t || t.status !== 'pendente') return;
-      t.status = 'aprovada';
-      aplicarPontos(t.desbravadorId, t.pontos, t.tipo, t.prova);
-    }
-
-    function rejeitarTarefa(tarefaId) {
-      const t = tarefas.find(x => x.id === Number(tarefaId));
-      if (!t) return;
-      t.status = 'rejeitada';
-      salvar();
-      renderizar();
-    }
-
-    function excluirDesbravador(id) {
-      if (!confirm('Excluir este desbravador?')) return;
-      desbravadores = desbravadores.filter(d => d.id !== Number(id));
-      salvar();
-      renderizar();
-    }
-
-    function zerarMes() {
-      if (!confirm('Zerar a pontuação mensal de todos?')) return;
-      desbravadores.forEach(d => d.pontosMes = 0);
-      salvar();
-      renderizar();
-    }
-
-    function renderizar() {
-      const mes = new Date().toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
-      document.getElementById('premioMes').innerHTML = `🎁 ${mes}<br>Prêmio: ${premios[new Date().getMonth() % premios.length]}`;
-
-      const ordenados = [...desbravadores].sort((a, b) => (b.pontosMes || 0) - (a.pontosMes || 0));
-      const lider = ordenados[0];
-      document.getElementById('liderAtual').innerText = lider && lider.pontosMes > 0 ? `👑 ${lider.nome} • ${lider.pontosMes} pts no mês` : 'Ainda sem pontuação';
-
-      ['desbravadorPontuacao', 'desbravadorTarefa'].forEach(id => {
-        const el = document.getElementById(id);
-        el.innerHTML = '<option value="">Selecione o desbravador</option>' + desbravadores.map(d => `<option value="${d.id}">${d.nome}</option>`).join('');
-      });
-
-      ['tipoPontuacao', 'tipoTarefa'].forEach(id => {
-        const el = document.getElementById(id);
-        el.innerHTML = tiposPontuacao.map((t, i) => `<option value="${i}">${t.nome} (${t.pontos > 0 ? '+' : ''}${t.pontos})</option>`).join('');
-      });
-
-      const max = Math.max(1, ...desbravadores.map(d => d.pontosMes || 0));
-      document.getElementById('grafico').innerHTML = ordenados.map(d => {
-        const n = nivelDe(d.pontosTotal || 0).atual;
-        const largura = Math.max(4, ((d.pontosMes || 0) / max) * 100);
-        return `<div class="chart-row"><div class="chart-label"><b>${n.emoji} ${d.nome}</b><span>${d.pontosMes || 0} pts</span></div><div class="ranking-bar"><div class="fill" style="width:${largura}%"></div></div></div>`;
-      }).join('') || '<p>Nenhum participante cadastrado.</p>';
-
-      document.getElementById('ranking').innerHTML = ordenados.map((d, i) => {
-        const nivel = nivelDe(d.pontosTotal || 0);
-        const atual = nivel.atual;
-        const proximo = nivel.proximo;
-        const progresso = proximo ? Math.min(100, (((d.pontosTotal || 0) - atual.pontos) / (proximo.pontos - atual.pontos)) * 100) : 100;
-        return `<div class="player"><div class="avatar">${d.foto ? `<img src="${d.foto}" alt="${d.nome}">` : '🧭'}</div><div><b>${i + 1}º ${d.nome}</b><br><span class="tag">${d.cargo}</span><span class="tag team">${d.equipe}</span><span class="tag">${atual.emoji} ${atual.nome}</span><p class="small">Mês: ${d.pontosMes || 0} pts • Total: ${d.pontosTotal || 0} pts • ${textoProximoNivel(d.pontosTotal || 0)}</p><div class="ranking-bar"><div class="fill" style="width:${progresso}%"></div></div></div><div>${adminAtivo ? `<button class="danger" onclick="excluirDesbravador(${d.id})">Excluir</button>` : ''}</div></div>`;
-      }).join('') || '<p>Nenhum desbravador cadastrado.</p>';
-
-      const pontosEquipes = {};
-      desbravadores.forEach(d => pontosEquipes[d.equipe] = (pontosEquipes[d.equipe] || 0) + (d.pontosMes || 0));
-      document.getElementById('rankingEquipes').innerHTML = Object.entries(pontosEquipes).sort((a, b) => b[1] - a[1]).map((e, i) => `<p>${i + 1}º <b>${e[0]}</b> — ${e[1]} pts</p>`).join('') || '<p>Nenhuma equipe ainda.</p>';
-
-      document.getElementById('tarefasPendentes').innerHTML = tarefas.filter(t => t.status === 'pendente').map(t => `<div class="task"><div class="avatar">📌</div><div><b>${t.nome}</b><br><span class="tag pending">Pendente</span><p class="small">${t.tipo} • ${t.pontos > 0 ? '+' : ''}${t.pontos} pts</p><p>${t.prova}</p><p class="small">${t.data}</p></div><div><button onclick="aprovarTarefa(${t.id})">Aprovar</button><button class="danger" onclick="rejeitarTarefa(${t.id})">Rejeitar</button></div></div>`).join('') || '<p class="small">Nenhuma tarefa pendente.</p>';
-
-      document.getElementById('historico').innerHTML = historico.slice(0, 30).map(h => `<p class="small">${h.data} — <b>${h.nome}</b>: ${h.pontos > 0 ? '+' : ''}${h.pontos} pts • ${h.motivo}${h.obs ? ' • ' + h.obs : ''}</p>`).join('') || '<p class="small">Ainda sem histórico.</p>';
-    }
-
+    let desbravadores=JSON.parse(localStorage.getItem('rubem_desbravadores_v3'))||[];
+    let tarefas=JSON.parse(localStorage.getItem('rubem_tarefas_v3'))||[];
+    let tarefasExtras=JSON.parse(localStorage.getItem('rubem_tarefas_extras_v3'))||[];
+    let historico=JSON.parse(localStorage.getItem('rubem_historico_v3'))||[];
+    let admins=JSON.parse(localStorage.getItem('rubem_admins_v3'))||[{nome:'Administrador Principal',senha:'ruben123'}];
+    let adminAtivo=false, fotoTemporaria='';
+    const premios=['Arganel','Sorvete para a unidade','Chocolate','Caixa de bombom','Medalha simbólica','Brinde surpresa'];
+    const tiposPontuacao=[{nome:'Presença na reunião',pontos:10},{nome:'Atividade do caderno de classe',pontos:15},{nome:'Participação em evento',pontos:20},{nome:'Venda de marmitas',pontos:25},{nome:'Bom comportamento',pontos:15},{nome:'Participação nas atividades',pontos:15},{nome:'Ajuda na unidade',pontos:20},{nome:'Verso bíblico decorado',pontos:10},{nome:'Destaque especial',pontos:30},{nome:'Atraso / falta de compromisso',pontos:-10}];
+    const extrasAleatorias=['Memorizar um verso bíblico e recitar para o conselheiro','Ajudar na organização da reunião da unidade','Convidar um amigo para conhecer o clube','Fazer uma boa ação e relatar para a liderança','Completar uma atividade atrasada do caderno de classe','Participar com destaque em uma atividade da unidade','Ajudar na venda de marmitas da unidade','Fazer uma oração especial pela unidade','Chegar no horário e ajudar antes da reunião','Trazer uma ideia criativa para a próxima atividade'];
+    const niveis=[{nome:'Iniciante',pontos:0,emoji:'🌱'},{nome:'Bronze',pontos:50,emoji:'🥉'},{nome:'Ouro',pontos:120,emoji:'🥇'},{nome:'Platina',pontos:220,emoji:'💠'},{nome:'Diamante',pontos:350,emoji:'💎'},{nome:'Conquistador de Honra',pontos:500,emoji:'🏆'},{nome:'Mestre da Unidade',pontos:700,emoji:'👑'}];
+    function salvar(){localStorage.setItem('rubem_desbravadores_v3',JSON.stringify(desbravadores));localStorage.setItem('rubem_tarefas_v3',JSON.stringify(tarefas));localStorage.setItem('rubem_tarefas_extras_v3',JSON.stringify(tarefasExtras));localStorage.setItem('rubem_historico_v3',JSON.stringify(historico));localStorage.setItem('rubem_admins_v3',JSON.stringify(admins));}
+    function mostrarPreviewFoto(){const arquivo=fotoDesbravador.files[0],preview=previewFoto;fotoTemporaria='';preview.style.display='none';if(!arquivo)return;const leitor=new FileReader();leitor.onload=e=>{fotoTemporaria=e.target.result;preview.src=fotoTemporaria;preview.style.display='block'};leitor.readAsDataURL(arquivo)}
+    function entrar(){const tipo=tipoLogin.value,senha=senhaAdmin.value.trim();if(tipo==='admin'){if(!admins.some(a=>a.senha===senha))return alert('Senha de administrador incorreta.');adminAtivo=true;document.body.classList.add('admin-on')}else{adminAtivo=false;document.body.classList.remove('admin-on')}renderizar()}
+    function sairAdmin(){adminAtivo=false;document.body.classList.remove('admin-on');renderizar()}
+    function cadastrarDesbravador(){const nome=nomeDesbravador.value.trim();if(!nome)return alert('Digite o nome do desbravador.');desbravadores.push({id:Date.now(),nome,equipe:equipeDesbravador.value,cargo:cargoDesbravador.value,foto:fotoTemporaria,pontosMes:0,pontosTotal:0});nomeDesbravador.value='';fotoDesbravador.value='';previewFoto.style.display='none';fotoTemporaria='';salvar();renderizar();alert('Desbravador cadastrado com sucesso!')}
+    function nivelDe(pontos){let atual=niveis[0],proximo=null;for(let i=0;i<niveis.length;i++){if(pontos>=niveis[i].pontos)atual=niveis[i];else{proximo=niveis[i];break}}return{atual,proximo}}
+    function textoProximoNivel(pontos){const n=nivelDe(pontos);return n.proximo?`${n.proximo.pontos-pontos} pts para ${n.proximo.nome}`:'Nível máximo alcançado'}
+    function aplicarPontos(id,pontos,motivo,obs){const d=desbravadores.find(x=>x.id===Number(id));if(!d)return alert('Desbravador não encontrado.');d.pontosMes=Math.max(0,(d.pontosMes||0)+pontos);d.pontosTotal=Math.max(0,(d.pontosTotal||0)+pontos);historico.unshift({nome:d.nome,pontos,motivo,obs:obs||'',data:new Date().toLocaleString('pt-BR')});salvar();renderizar()}
+    function lancarPontuacaoManual(){const id=desbravadorPontuacao.value,idx=Number(tipoPontuacao.value),obs=observacaoPontuacao.value.trim();if(!id)return alert('Escolha um desbravador.');aplicarPontos(id,tiposPontuacao[idx].pontos,tiposPontuacao[idx].nome,obs);observacaoPontuacao.value=''}
+    function enviarTarefa(){const id=desbravadorTarefa.value,idx=Number(tipoTarefa.value),prova=provaTarefa.value.trim(),d=desbravadores.find(x=>x.id===Number(id));if(!d)return alert('Escolha seu nome.');if(!prova)return alert('Escreva uma observação da tarefa.');tarefas.unshift({id:Date.now(),desbravadorId:d.id,nome:d.nome,tipo:tiposPontuacao[idx].nome,pontos:tiposPontuacao[idx].pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR')});provaTarefa.value='';salvar();renderizar();alert('Tarefa enviada para aprovação!')}
+    function enviarTarefaExtra(extraId){const id=prompt('Digite o número do seu cadastro conforme aparece na lista do ranking, ou peça ao administrador para enviar pelo seu nome.');if(!id)return;const pos=Number(id)-1;const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));const d=ordenados[pos];const ex=tarefasExtras.find(x=>x.id===extraId);if(!d||!ex)return alert('Não encontrei o desbravador ou a tarefa.');const prova=prompt('Escreva a prova/observação da tarefa extra:');if(!prova)return alert('Envio cancelado.');tarefas.unshift({id:Date.now(),desbravadorId:d.id,nome:d.nome,tipo:'Tarefa extra: '+ex.titulo,pontos:ex.pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR')});salvar();renderizar();alert('Tarefa extra enviada para aprovação!')}
+    function gerarTarefaAleatoria(){tituloExtra.value='Desafio Extra da Unidade';descricaoExtra.value=extrasAleatorias[Math.floor(Math.random()*extrasAleatorias.length)];pontosExtra.value=50}
+    function criarTarefaExtra(){const titulo=tituloExtra.value.trim(),descricao=descricaoExtra.value.trim(),pontos=Number(pontosExtra.value)||50;if(!titulo||!descricao)return alert('Digite título e descrição.');tarefasExtras.unshift({id:Date.now(),titulo,descricao,pontos,ativa:true,data:new Date().toLocaleString('pt-BR')});tituloExtra.value='';descricaoExtra.value='';pontosExtra.value=50;salvar();renderizar();alert('Tarefa extra publicada!')}
+    function removerExtra(id){tarefasExtras=tarefasExtras.filter(t=>t.id!==id);salvar();renderizar()}
+    function aprovarTarefa(tarefaId){const t=tarefas.find(x=>x.id===Number(tarefaId));if(!t||t.status!=='pendente')return;t.status='aprovada';aplicarPontos(t.desbravadorId,t.pontos,t.tipo,t.prova)}
+    function rejeitarTarefa(tarefaId){const t=tarefas.find(x=>x.id===Number(tarefaId));if(!t)return;t.status='rejeitada';salvar();renderizar()}
+    function excluirDesbravador(id){if(!confirm('Excluir este desbravador?'))return;desbravadores=desbravadores.filter(d=>d.id!==Number(id));salvar();renderizar()}
+    function zerarMes(){if(!confirm('Zerar a pontuação mensal de todos?'))return;desbravadores.forEach(d=>d.pontosMes=0);salvar();renderizar()}
+    function renderizar(){const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});premioMes.innerHTML=`🎁 ${mes}<br>Prêmio: ${premios[new Date().getMonth()%premios.length]}`;const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));const lider=ordenados[0];liderAtual.innerText=lider&&lider.pontosMes>0?`👑 ${lider.nome} • ${lider.pontosMes} pts no mês`:'Ainda sem pontuação';['desbravadorPontuacao','desbravadorTarefa'].forEach(id=>{const el=document.getElementById(id);el.innerHTML='<option value="">Selecione o desbravador</option>'+desbravadores.map(d=>`<option value="${d.id}">${d.nome}</option>`).join('')});['tipoPontuacao','tipoTarefa'].forEach(id=>{const el=document.getElementById(id);el.innerHTML=tiposPontuacao.map((t,i)=>`<option value="${i}">${t.nome} (${t.pontos>0?'+':''}${t.pontos})</option>`).join('')});
+      tarefasExtrasAtivas.innerHTML=tarefasExtras.map(ex=>`<div class="task"><div class="avatar">🔥</div><div><b>${ex.titulo}</b><br><span class="tag extra">Extra máxima</span><p>${ex.descricao}</p><p class="small">Vale ${ex.pontos} pontos • Criada em ${ex.data}</p></div><div><button onclick="enviarTarefaExtra(${ex.id})">Cumpri essa tarefa</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa extra publicada ainda.</p>';
+      extrasAdmin.innerHTML=tarefasExtras.map(ex=>`<p class="small">🔥 <b>${ex.titulo}</b> — ${ex.pontos} pts <button class="danger" onclick="removerExtra(${ex.id})">Remover</button></p>`).join('')||'<p class="small">Nenhuma tarefa extra criada.</p>';
+      const max=Math.max(1,...desbravadores.map(d=>d.pontosMes||0));grafico.innerHTML=ordenados.map(d=>{const n=nivelDe(d.pontosTotal||0).atual,largura=Math.max(4,((d.pontosMes||0)/max)*100);return`<div class="chart-row"><div class="chart-label"><b>${n.emoji} ${d.nome}</b><span>${d.pontosMes||0} pts</span></div><div class="ranking-bar"><div class="fill" style="width:${largura}%"></div></div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
+      ranking.innerHTML=ordenados.map((d,i)=>{const nivel=nivelDe(d.pontosTotal||0),atual=nivel.atual,proximo=nivel.proximo,progresso=proximo?Math.min(100,(((d.pontosTotal||0)-atual.pontos)/(proximo.pontos-atual.pontos))*100):100;return`<div class="player"><div class="avatar">${d.foto?`<img src="${d.foto}" alt="${d.nome}">`:'🧭'}</div><div><b>${i+1}º ${d.nome}</b><br><span class="tag">${d.cargo}</span><span class="tag team">${d.equipe}</span><span class="tag">${atual.emoji} ${atual.nome}</span><p class="small">Mês: ${d.pontosMes||0} pts • Total: ${d.pontosTotal||0} pts • ${textoProximoNivel(d.pontosTotal||0)}</p><div class="ranking-bar"><div class="fill" style="width:${progresso}%"></div></div></div><div>${adminAtivo?`<button class="danger" onclick="excluirDesbravador(${d.id})">Excluir</button>`:''}</div></div>`}).join('')||'<p>Nenhum desbravador cadastrado.</p>';
+      const pontosEquipes={};desbravadores.forEach(d=>pontosEquipes[d.equipe]=(pontosEquipes[d.equipe]||0)+(d.pontosMes||0));rankingEquipes.innerHTML=Object.entries(pontosEquipes).sort((a,b)=>b[1]-a[1]).map((e,i)=>`<p>${i+1}º <b>${e[0]}</b> — ${e[1]} pts</p>`).join('')||'<p>Nenhuma equipe ainda.</p>';
+      tarefasPendentes.innerHTML=tarefas.filter(t=>t.status==='pendente').map(t=>`<div class="task"><div class="avatar">📌</div><div><b>${t.nome}</b><br><span class="tag pending">Pendente</span><p class="small">${t.tipo} • ${t.pontos>0?'+':''}${t.pontos} pts</p><p>${t.prova}</p><p class="small">${t.data}</p></div><div><button onclick="aprovarTarefa(${t.id})">Aprovar</button><button class="danger" onclick="rejeitarTarefa(${t.id})">Rejeitar</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa pendente.</p>';
+      historico.innerHTML=historico.slice(0,30).map(h=>`<p class="small">${h.data} — <b>${h.nome}</b>: ${h.pontos>0?'+':''}${h.pontos} pts • ${h.motivo}${h.obs?' • '+h.obs:''}</p>`).join('')||'<p class="small">Ainda sem histórico.</p>'}
     renderizar();
   </script>
 </body>
