@@ -156,7 +156,14 @@
     function rejeitarTarefa(tarefaId){if(!adminAtivo)return;const t=tarefas.find(x=>x.id===Number(tarefaId));if(!t)return;t.status='rejeitada';salvar();renderizar();}
     function excluirDesbravador(id){if(!adminAtivo)return;if(!confirm('Excluir este desbravador?'))return;desbravadores=desbravadores.filter(d=>d.id!==Number(id));salvar();renderizar();}
     function zerarMes(){if(!adminAtivo)return;if(!confirm('Zerar a pontuação mensal de todos?'))return;desbravadores.forEach(d=>d.pontosMes=0);salvar();renderizar();}
-    function preencherSelects(){const op='<option value="">Selecione o desbravador</option>'+desbravadores.map(d=>`<option value="${d.id}">${d.nome}</option>`).join('');desbravadorPontuacao.innerHTML=op;desbravadorTarefa.innerHTML=op;const opP=tiposPontuacao.map((t,i)=>`<option value="${i}">${t.nome} (${t.pontos>0?'+':''}${t.pontos})</option>`).join('');tipoPontuacao.innerHTML=opP;tipoTarefa.innerHTML=opP;}
+    function preencherSelects(){
+      const op = '<option value="">Selecione seu nome</option>' + desbravadores.map((d,i)=>`<option value="${d.id}">${i+1}º • ${d.nome} (${d.equipe})</option>`).join('');
+      desbravadorPontuacao.innerHTML = op;
+      desbravadorTarefa.innerHTML = op;
+      const opP = tiposPontuacao.map((t,i)=>`<option value="${i}">${t.nome} (${t.pontos>0?'+':''}${t.pontos})</option>`).join('');
+      tipoPontuacao.innerHTML = opP;
+      tipoTarefa.innerHTML = opP;
+    }
     function renderizar(){preencherSelects();const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});premioMes.innerHTML=`🎁 ${mes}<br>Prêmio: ${premios[new Date().getMonth()%premios.length]}`;const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));const lider=ordenados[0];liderAtual.innerText=lider&&lider.pontosMes>0?`👑 ${lider.nome} • ${lider.pontosMes} pts no mês`:'Ainda sem pontuação';
       tarefasExtrasAtivas.innerHTML=tarefasExtras.map(extra=>`<div class="task"><div class="avatar">🔥</div><div><b>${extra.titulo}</b><br><span class="tag extra">Extra máxima</span><p>${extra.descricao}</p><p class="small">Vale ${extra.pontos} pontos • Criada em ${extra.data}</p></div><div><button onclick="enviarTarefaExtra(${extra.id})">Cumpri essa tarefa</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa extra publicada ainda.</p>';
       extrasAdmin.innerHTML=tarefasExtras.map(extra=>`<p class="small">🔥 <b>${extra.titulo}</b> — ${extra.pontos} pts <button class="danger" onclick="removerExtra(${extra.id})">Remover</button></p>`).join('')||'<p class="small">Nenhuma tarefa extra criada.</p>';
