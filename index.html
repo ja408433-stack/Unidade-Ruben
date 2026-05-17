@@ -36,7 +36,7 @@
     <section class="hero">
       <div class="hero-top">
         <img class="hero-logo" src="logo-clube.png" alt="Logo do Clube" onerror="this.style.display='none'">
-        <div><h1>🎮🔥 UNIDADE RÚBEM 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Gamer</p></div>
+        <div><h1>🎮🔥 UNIDADE RÚBEM 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Online</p></div>
         <img class="hero-logo" src="logo-unidade.png" alt="Logo da Unidade" onerror="this.style.display='none'">
       </div>
     </section>
@@ -53,11 +53,12 @@
       </div>
       <button class="danger" onclick="sair()">Sair</button>
       <div id="statusLogin" class="status-login">Modo visitante</div>
+      <p class="small" id="statusFirebase">Conectando ao banco online...</p>
     </section>
 
     <section class="grid">
       <section class="card admin-area">
-        <h2>👑 Administradores</h2>
+        <h2>👑 Cadastrar Administrador Visual</h2>
         <input id="nomeAdminNovo" placeholder="Nome do administrador" />
         <label class="small">Foto do administrador:</label>
         <input id="fotoAdminNovo" type="file" accept="image/*" onchange="previewAdminFoto()" />
@@ -76,12 +77,13 @@
         <img id="previewFoto" class="preview-foto" alt="Prévia da foto">
         <button onclick="cadastrarDesbravador()">Cadastrar Desbravador</button>
       </section>
-      <section class="card"><h2>🏆 Premiação do Mês</h2><div class="premio" id="premioMes"></div><p class="small" style="margin-top:10px">O prêmio vai para quem tiver mais pontos no mês.</p></section>
     </section>
+
+    <section class="card"><h2>🏆 Premiação do Mês</h2><div class="premio" id="premioMes"></div><p class="small" style="margin-top:10px">O prêmio vai para quem tiver mais pontos no mês.</p></section>
 
     <section class="card desbravador-area">
       <h2>✅ Enviar tarefa feita para aprovação</h2>
-      <p class="small">Somente desbravadores enviam tarefas realizadas. Administradores apenas aprovam ou rejeitam.</p>
+      <p class="small">Desbravadores enviam tarefas realizadas. O administrador aprova e libera os pontos.</p>
       <div class="grid"><select id="desbravadorTarefa"></select><select id="tipoTarefa"></select></div>
       <textarea id="provaTarefa" placeholder="Escreva uma observação/prova. Exemplo: fiz atividade do caderno, participei do evento, vendi marmitas..."></textarea>
       <button onclick="enviarTarefa()">Enviar para aprovação</button>
@@ -117,105 +119,92 @@
     <section class="card"><h2>📜 Histórico</h2><div id="historico"></div></section>
   </main>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzG5c9OOkuqc88HKpCNE4QySyelqKUWIM",
+      authDomain: "unidade-ruben.firebaseapp.com",
+      projectId: "unidade-ruben",
+      storageBucket: "unidade-ruben.firebasestorage.app",
+      messagingSenderId: "979369641231",
+      appId: "1:979369641231:web:6f9def3cda6f5a3986ea7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const SENHA_ADMIN = 'ruben123';
-    const CHAVE_DESBRAVADORES='rubem_desbravadores_ok';
-    const CHAVE_TAREFAS='rubem_tarefas_ok';
-    const CHAVE_EXTRAS='rubem_extras_ok';
-    const CHAVE_HISTORICO='rubem_historico_ok';
-    let desbravadores=JSON.parse(localStorage.getItem(CHAVE_DESBRAVADORES))||[];
-    let tarefas=JSON.parse(localStorage.getItem(CHAVE_TAREFAS))||[];
-    let tarefasExtras=JSON.parse(localStorage.getItem(CHAVE_EXTRAS))||[];
-    let historico=JSON.parse(localStorage.getItem(CHAVE_HISTORICO))||[];
+    let desbravadores=[], tarefas=[], tarefasExtras=[], historico=[], adminsVisuais=[];
     let adminAtivo=false, fotoTemporaria='', fotoAdminTemp='';
-    let adminsVisuais=JSON.parse(localStorage.getItem('rubem_admins_visuais'))||[];
+
     const premios=['Arganel','Sorvete para a unidade','Chocolate','Caixa de bombom','Medalha simbólica','Brinde surpresa'];
     const tiposPontuacao=[{nome:'Presença na reunião',pontos:10},{nome:'Atividade do caderno de classe',pontos:15},{nome:'Participação em evento',pontos:20},{nome:'Venda de marmitas',pontos:25},{nome:'Bom comportamento',pontos:15},{nome:'Participação nas atividades',pontos:15},{nome:'Ajuda na unidade',pontos:20},{nome:'Verso bíblico decorado',pontos:10},{nome:'Destaque especial',pontos:30},{nome:'Atraso / falta de compromisso',pontos:-10}];
     const extrasAleatorias=['Memorizar um verso bíblico e recitar para o conselheiro','Ajudar na organização da reunião da unidade','Convidar um amigo para conhecer o clube','Fazer uma boa ação e relatar para a liderança','Completar uma atividade atrasada do caderno de classe','Participar com destaque em uma atividade da unidade','Ajudar na venda de marmitas da unidade','Fazer uma oração especial pela unidade','Chegar no horário e ajudar antes da reunião','Trazer uma ideia criativa para a próxima atividade'];
     const niveis=[{nome:'Iniciante',pontos:0,emoji:'🌱'},{nome:'Bronze',pontos:50,emoji:'🥉'},{nome:'Ouro',pontos:120,emoji:'🥇'},{nome:'Platina',pontos:220,emoji:'💠'},{nome:'Diamante',pontos:350,emoji:'💎'},{nome:'Conquistador de Honra',pontos:500,emoji:'🏆'},{nome:'Mestre da Unidade',pontos:700,emoji:'👑'}];
-    function salvar(){localStorage.setItem(CHAVE_DESBRAVADORES,JSON.stringify(desbravadores));localStorage.setItem(CHAVE_TAREFAS,JSON.stringify(tarefas));localStorage.setItem(CHAVE_EXTRAS,JSON.stringify(tarefasExtras));localStorage.setItem(CHAVE_HISTORICO,JSON.stringify(historico));localStorage.setItem('rubem_admins_visuais',JSON.stringify(adminsVisuais));}
-    function setModo(modo){document.body.classList.remove('modo-admin','modo-desbravador','modo-publico');document.body.classList.add(modo);statusLogin.textContent=modo==='modo-admin'?'Modo administrador':modo==='modo-desbravador'?'Modo desbravador':'Modo visitante';}
-    function mostrarLoginAdmin(){boxAdmin.style.display=boxAdmin.style.display==='none'?'block':'none';}
-    function entrarDesbravador(){adminAtivo=false;setModo('modo-desbravador');renderizar();}
-    function entrarAdmin(){if(senhaAdmin.value.trim()!==SENHA_ADMIN){alert('Senha incorreta.');return;}adminAtivo=true;senhaAdmin.value='';boxAdmin.style.display='none';setModo('modo-admin');renderizar();}
-    function sair(){adminAtivo=false;setModo('modo-publico');renderizar();}
-    function previewAdminFoto(){const arquivo=fotoAdminNovo.files[0];fotoAdminTemp='';previewAdmin.style.display='none';if(!arquivo)return;const leitor=new FileReader();leitor.onload=e=>{fotoAdminTemp=e.target.result;previewAdmin.src=fotoAdminTemp;previewAdmin.style.display='block'};leitor.readAsDataURL(arquivo);}
-    function cadastrarAdminVisual(){if(!adminAtivo)return alert('Apenas administradores podem cadastrar.');const nome=nomeAdminNovo.value.trim();if(!nome)return alert('Digite o nome do administrador.');adminsVisuais.push({nome,foto:fotoAdminTemp});nomeAdminNovo.value='';fotoAdminNovo.value='';previewAdmin.style.display='none';fotoAdminTemp='';salvar();renderizar();alert('Administrador cadastrado!');}
-    function mostrarPreviewFoto(){const arquivo=fotoDesbravador.files[0];fotoTemporaria='';previewFoto.style.display='none';if(!arquivo)return;const leitor=new FileReader();leitor.onload=e=>{fotoTemporaria=e.target.result;previewFoto.src=fotoTemporaria;previewFoto.style.display='block'};leitor.readAsDataURL(arquivo);}
-    function cadastrarDesbravador(){if(!adminAtivo)return alert('Apenas administradores podem cadastrar.');const nome=nomeDesbravador.value.trim();if(!nome)return alert('Digite o nome do desbravador.');desbravadores.push({id:Date.now(),nome,equipe:equipeDesbravador.value,cargo:cargoDesbravador.value,foto:fotoTemporaria,pontosMes:0,pontosTotal:0});nomeDesbravador.value='';fotoDesbravador.value='';previewFoto.style.display='none';fotoTemporaria='';salvar();renderizar();alert('Desbravador cadastrado com sucesso!');}
+
+    function setStatus(txt){document.getElementById('statusFirebase').textContent=txt;}
+    function setModo(modo){document.body.classList.remove('modo-admin','modo-desbravador','modo-publico');document.body.classList.add(modo);document.getElementById('statusLogin').textContent=modo==='modo-admin'?'Modo administrador':modo==='modo-desbravador'?'Modo desbravador':'Modo visitante';}
     function nivelDe(pontos){let atual=niveis[0],proximo=null;for(let i=0;i<niveis.length;i++){if(pontos>=niveis[i].pontos)atual=niveis[i];else{proximo=niveis[i];break}}return{atual,proximo};}
     function textoProximoNivel(pontos){const n=nivelDe(pontos);return n.proximo?`${n.proximo.pontos-pontos} pts para ${n.proximo.nome}`:'Nível máximo alcançado';}
-    function aplicarPontos(id,pontos,motivo,obs){if(!adminAtivo)return alert('Apenas administradores podem pontuar.');const d=desbravadores.find(x=>x.id===Number(id));if(!d)return alert('Desbravador não encontrado.');d.pontosMes=Math.max(0,(d.pontosMes||0)+pontos);d.pontosTotal=Math.max(0,(d.pontosTotal||0)+pontos);historico.unshift({nome:d.nome,pontos,motivo,obs:obs||'',data:new Date().toLocaleString('pt-BR')});salvar();renderizar();}
-    function lancarPontuacaoManual(){const id=desbravadorPontuacao.value,idx=Number(tipoPontuacao.value),obs=observacaoPontuacao.value.trim();if(!id)return alert('Escolha um desbravador.');aplicarPontos(id,tiposPontuacao[idx].pontos,tiposPontuacao[idx].nome,obs);observacaoPontuacao.value='';}
-    function enviarTarefa(){const id=desbravadorTarefa.value,idx=Number(tipoTarefa.value),prova=provaTarefa.value.trim();const d=desbravadores.find(x=>x.id===Number(id));if(!d)return alert('Escolha seu nome.');if(!prova)return alert('Escreva uma observação da tarefa.');tarefas.unshift({id:Date.now(),desbravadorId:d.id,nome:d.nome,tipo:tiposPontuacao[idx].nome,pontos:tiposPontuacao[idx].pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR')});provaTarefa.value='';salvar();renderizar();alert('Tarefa enviada para aprovação!');}
-    function enviarTarefaExtra(extraId){const extra=tarefasExtras.find(t=>t.id===Number(extraId));if(!extra)return alert('Tarefa extra não encontrada.');const nome=prompt('Digite seu nome exatamente como aparece no ranking:');if(!nome)return;const d=desbravadores.find(x=>x.nome.toLowerCase().trim()===nome.toLowerCase().trim());if(!d)return alert('Nome não encontrado no ranking.');const prova=prompt('Escreva a prova/observação da tarefa extra:');if(!prova)return;tarefas.unshift({id:Date.now(),desbravadorId:d.id,nome:d.nome,tipo:'Tarefa extra: '+extra.titulo,pontos:extra.pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR')});salvar();renderizar();alert('Tarefa extra enviada para aprovação!');}
-    function gerarTarefaAleatoria(){tituloExtra.value='Desafio Extra da Unidade';descricaoExtra.value=extrasAleatorias[Math.floor(Math.random()*extrasAleatorias.length)];pontosExtra.value=50;}
-    function criarTarefaExtra(){if(!adminAtivo)return alert('Apenas administradores podem criar tarefas extras.');const titulo=tituloExtra.value.trim(),descricao=descricaoExtra.value.trim(),pontos=Number(pontosExtra.value)||50;if(!titulo||!descricao)return alert('Digite título e descrição.');tarefasExtras.unshift({id:Date.now(),titulo,descricao,pontos,data:new Date().toLocaleString('pt-BR')});tituloExtra.value='';descricaoExtra.value='';pontosExtra.value=50;salvar();renderizar();alert('Tarefa extra publicada!');}
-    function removerExtra(id){if(!adminAtivo)return;if(!confirm('Remover esta tarefa extra?'))return;tarefasExtras=tarefasExtras.filter(t=>t.id!==Number(id));salvar();renderizar();}
-    function aprovarTarefa(tarefaId){if(!adminAtivo)return alert('Apenas administradores podem aprovar.');const t=tarefas.find(x=>x.id===Number(tarefaId));if(!t||t.status!=='pendente')return;t.status='aprovada';const d=desbravadores.find(x=>x.id===Number(t.desbravadorId));if(d){d.pontosMes=Math.max(0,(d.pontosMes||0)+t.pontos);d.pontosTotal=Math.max(0,(d.pontosTotal||0)+t.pontos);historico.unshift({nome:d.nome,pontos:t.pontos,motivo:t.tipo,obs:t.prova,data:new Date().toLocaleString('pt-BR')});}salvar();renderizar();}
-    function rejeitarTarefa(tarefaId){if(!adminAtivo)return;const t=tarefas.find(x=>x.id===Number(tarefaId));if(!t)return;t.status='rejeitada';salvar();renderizar();}
-    function excluirDesbravador(id){if(!adminAtivo)return;if(!confirm('Excluir este desbravador?'))return;desbravadores=desbravadores.filter(d=>d.id!==Number(id));salvar();renderizar();}
-    function zerarMes(){if(!adminAtivo)return;if(!confirm('Zerar a pontuação mensal de todos?'))return;desbravadores.forEach(d=>d.pontosMes=0);salvar();renderizar();}
-    function preencherSelects(){
-      const op = '<option value="">Selecione seu nome</option>' + desbravadores.map((d,i)=>`<option value="${d.id}">${i+1}º • ${d.nome} (${d.equipe})</option>`).join('');
-      desbravadorPontuacao.innerHTML = op;
-      desbravadorTarefa.innerHTML = op;
-      const opP = tiposPontuacao.map((t,i)=>`<option value="${i}">${t.nome} (${t.pontos>0?'+':''}${t.pontos})</option>`).join('');
-      tipoPontuacao.innerHTML = opP;
-      tipoTarefa.innerHTML = opP;
+
+    function ouvirDados(){
+      onSnapshot(collection(db,'desbravadores'),snap=>{desbravadores=snap.docs.map(d=>({id:d.id,...d.data()}));renderizar();setStatus('✅ Online: dados sincronizados para todos.');},err=>{setStatus('Erro ao carregar desbravadores: '+err.message)});
+      onSnapshot(collection(db,'tarefas'),snap=>{tarefas=snap.docs.map(d=>({id:d.id,...d.data()}));renderizar();},err=>console.error(err));
+      onSnapshot(collection(db,'tarefasExtras'),snap=>{tarefasExtras=snap.docs.map(d=>({id:d.id,...d.data()}));renderizar();},err=>console.error(err));
+      onSnapshot(collection(db,'historico'),snap=>{historico=snap.docs.map(d=>({id:d.id,...d.data()}));renderizar();},err=>console.error(err));
+      onSnapshot(collection(db,'adminsVisuais'),snap=>{adminsVisuais=snap.docs.map(d=>({id:d.id,...d.data()}));renderizar();},err=>console.error(err));
     }
-    function renderizar(){preencherSelects();const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});premioMes.innerHTML=`🎁 ${mes}<br>Prêmio: ${premios[new Date().getMonth()%premios.length]}`;const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));const lider=ordenados[0];liderAtual.innerText=lider&&lider.pontosMes>0?`👑 ${lider.nome} • ${lider.pontosMes} pts no mês`:'Ainda sem pontuação';
-      tarefasExtrasAtivas.innerHTML=tarefasExtras.map(extra=>`<div class="task"><div class="avatar">🔥</div><div><b>${extra.titulo}</b><br><span class="tag extra">Extra máxima</span><p>${extra.descricao}</p><p class="small">Vale ${extra.pontos} pontos • Criada em ${extra.data}</p></div><div><button onclick="enviarTarefaExtra(${extra.id})">Cumpri essa tarefa</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa extra publicada ainda.</p>';
-      extrasAdmin.innerHTML=tarefasExtras.map(extra=>`<p class="small">🔥 <b>${extra.titulo}</b> — ${extra.pontos} pts <button class="danger" onclick="removerExtra(${extra.id})">Remover</button></p>`).join('')||'<p class="small">Nenhuma tarefa extra criada.</p>';
-      const max=Math.max(1,...desbravadores.map(d=>d.pontosMes||0));grafico.innerHTML=ordenados.map(d=>{const nivel=nivelDe(d.pontosTotal||0).atual,largura=Math.max(4,((d.pontosMes||0)/max)*100);return`<div class="chart-row"><div class="chart-label"><b>${nivel.emoji} ${d.nome}</b><span>${d.pontosMes||0} pts</span></div><div class="ranking-bar"><div class="fill" style="width:${largura}%"></div></div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
-      ranking.innerHTML=ordenados.map((d,i)=>{const nivel=nivelDe(d.pontosTotal||0),atual=nivel.atual,proximo=nivel.proximo,progresso=proximo?Math.min(100,(((d.pontosTotal||0)-atual.pontos)/(proximo.pontos-atual.pontos))*100):100;return`<div class="player"><div class="avatar">${d.foto?`<img src="${d.foto}" alt="${d.nome}">`:'🧭'}</div><div><b>${i+1}º ${d.nome}</b><br><span class="tag">${d.cargo}</span><span class="tag team">${d.equipe}</span><span class="tag">${atual.emoji} ${atual.nome}</span><p class="small">Mês: ${d.pontosMes||0} pts • Total: ${d.pontosTotal||0} pts • ${textoProximoNivel(d.pontosTotal||0)}</p><div class="ranking-bar"><div class="fill" style="width:${progresso}%"></div></div></div><div>${adminAtivo?`<button class="danger" onclick="excluirDesbravador(${d.id})">Excluir</button>`:''}</div></div>`}).join('')||'<p>Nenhum desbravador cadastrado.</p>';
-      const pontosEquipes={};desbravadores.forEach(d=>{pontosEquipes[d.equipe]=(pontosEquipes[d.equipe]||0)+(d.pontosMes||0)});rankingEquipes.innerHTML=Object.entries(pontosEquipes).sort((a,b)=>b[1]-a[1]).map((e,i)=>`<p>${i+1}º <b>${e[0]}</b> — ${e[1]} pts</p>`).join('')||'<p>Nenhuma equipe ainda.</p>';
-      tarefasPendentes.innerHTML=tarefas.filter(t=>t.status==='pendente').map(t=>`<div class="task"><div class="avatar">📌</div><div><b>${t.nome}</b><br><span class="tag pending">Pendente</span><p class="small">${t.tipo} • ${t.pontos>0?'+':''}${t.pontos} pts</p><p>${t.prova}</p><p class="small">${t.data}</p></div><div><button onclick="aprovarTarefa(${t.id})">Aprovar</button><button class="danger" onclick="rejeitarTarefa(${t.id})">Rejeitar</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa pendente.</p>';
+
+    window.mostrarLoginAdmin=function(){const b=document.getElementById('boxAdmin');b.style.display=b.style.display==='none'?'block':'none'}
+    window.entrarDesbravador=function(){adminAtivo=false;setModo('modo-desbravador');renderizar()}
+    window.entrarAdmin=function(){const senha=document.getElementById('senhaAdmin').value.trim();if(senha!==SENHA_ADMIN)return alert('Senha incorreta.');adminAtivo=true;document.getElementById('senhaAdmin').value='';document.getElementById('boxAdmin').style.display='none';setModo('modo-admin');renderizar()}
+    window.sair=function(){adminAtivo=false;setModo('modo-publico');renderizar()}
+
+    window.previewAdminFoto=function(){const arquivo=document.getElementById('fotoAdminNovo').files[0];fotoAdminTemp='';document.getElementById('previewAdmin').style.display='none';if(!arquivo)return;const leitor=new FileReader();leitor.onload=e=>{fotoAdminTemp=e.target.result;previewAdmin.src=fotoAdminTemp;previewAdmin.style.display='block'};leitor.readAsDataURL(arquivo)}
+    window.cadastrarAdminVisual=async function(){if(!adminAtivo)return alert('Apenas administradores podem cadastrar.');const nome=nomeAdminNovo.value.trim();if(!nome)return alert('Digite o nome.');await addDoc(collection(db,'adminsVisuais'),{nome,foto:fotoAdminTemp,criadoEm:serverTimestamp()});nomeAdminNovo.value='';fotoAdminNovo.value='';previewAdmin.style.display='none';fotoAdminTemp='';alert('Administrador cadastrado!')}
+
+    window.mostrarPreviewFoto=function(){const arquivo=document.getElementById('fotoDesbravador').files[0];fotoTemporaria='';previewFoto.style.display='none';if(!arquivo)return;const leitor=new FileReader();leitor.onload=e=>{fotoTemporaria=e.target.result;previewFoto.src=fotoTemporaria;previewFoto.style.display='block'};leitor.readAsDataURL(arquivo)}
+    window.cadastrarDesbravador=async function(){if(!adminAtivo)return alert('Apenas administradores podem cadastrar.');const nome=nomeDesbravador.value.trim();if(!nome)return alert('Digite o nome do desbravador.');await addDoc(collection(db,'desbravadores'),{nome,equipe:equipeDesbravador.value,cargo:cargoDesbravador.value,foto:fotoTemporaria,pontosMes:0,pontosTotal:0,criadoEm:serverTimestamp()});nomeDesbravador.value='';fotoDesbravador.value='';previewFoto.style.display='none';fotoTemporaria='';alert('Desbravador cadastrado com sucesso!')}
+
+    async function registrarHistorico(item){await addDoc(collection(db,'historico'),{...item,data:new Date().toLocaleString('pt-BR'),criadoEm:serverTimestamp()})}
+    async function aplicarPontos(id,pontos,motivo,obs){if(!adminAtivo)return alert('Apenas administradores podem pontuar.');const d=desbravadores.find(x=>x.id===id);if(!d)return alert('Desbravador não encontrado.');await updateDoc(doc(db,'desbravadores',id),{pontosMes:Math.max(0,(d.pontosMes||0)+pontos),pontosTotal:Math.max(0,(d.pontosTotal||0)+pontos)});await registrarHistorico({nome:d.nome,pontos,motivo,obs:obs||''})}
+
+    window.lancarPontuacaoManual=async function(){const id=desbravadorPontuacao.value,idx=Number(tipoPontuacao.value),obs=observacaoPontuacao.value.trim();if(!id)return alert('Escolha um desbravador.');await aplicarPontos(id,tiposPontuacao[idx].pontos,tiposPontuacao[idx].nome,obs);observacaoPontuacao.value=''}
+    window.enviarTarefa=async function(){const id=desbravadorTarefa.value,idx=Number(tipoTarefa.value),prova=provaTarefa.value.trim();const d=desbravadores.find(x=>x.id===id);if(!d)return alert('Escolha seu nome.');if(!prova)return alert('Escreva uma observação da tarefa.');await addDoc(collection(db,'tarefas'),{desbravadorId:d.id,nome:d.nome,tipo:tiposPontuacao[idx].nome,pontos:tiposPontuacao[idx].pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR'),criadoEm:serverTimestamp()});provaTarefa.value='';alert('Tarefa enviada para aprovação!')}
+    window.enviarTarefaExtra=async function(extraId){const extra=tarefasExtras.find(t=>t.id===extraId);if(!extra)return alert('Tarefa extra não encontrada.');const nome=prompt('Digite seu nome exatamente como aparece no ranking:');if(!nome)return;const d=desbravadores.find(x=>x.nome.toLowerCase().trim()===nome.toLowerCase().trim());if(!d)return alert('Nome não encontrado no ranking.');const prova=prompt('Escreva a prova/observação da tarefa extra:');if(!prova)return;await addDoc(collection(db,'tarefas'),{desbravadorId:d.id,nome:d.nome,tipo:'Tarefa extra: '+extra.titulo,pontos:extra.pontos,prova,status:'pendente',data:new Date().toLocaleString('pt-BR'),criadoEm:serverTimestamp()});alert('Tarefa extra enviada para aprovação!')}
+
+    window.gerarTarefaAleatoria=function(){tituloExtra.value='Desafio Extra da Unidade';descricaoExtra.value=extrasAleatorias[Math.floor(Math.random()*extrasAleatorias.length)];pontosExtra.value=50}
+    window.criarTarefaExtra=async function(){if(!adminAtivo)return alert('Apenas administradores podem criar tarefas extras.');const titulo=tituloExtra.value.trim(),descricao=descricaoExtra.value.trim(),pontos=Number(pontosExtra.value)||50;if(!titulo||!descricao)return alert('Digite título e descrição.');await addDoc(collection(db,'tarefasExtras'),{titulo,descricao,pontos,data:new Date().toLocaleString('pt-BR'),criadoEm:serverTimestamp()});tituloExtra.value='';descricaoExtra.value='';pontosExtra.value=50;alert('Tarefa extra publicada!')}
+    window.removerExtra=async function(id){if(!adminAtivo)return;if(!confirm('Remover esta tarefa extra?'))return;await deleteDoc(doc(db,'tarefasExtras',id))}
+    window.aprovarTarefa=async function(tarefaId){if(!adminAtivo)return alert('Apenas administradores podem aprovar.');const t=tarefas.find(x=>x.id===tarefaId);if(!t||t.status!=='pendente')return;await updateDoc(doc(db,'tarefas',tarefaId),{status:'aprovada'});const d=desbravadores.find(x=>x.id===t.desbravadorId);if(d){await updateDoc(doc(db,'desbravadores',d.id),{pontosMes:Math.max(0,(d.pontosMes||0)+t.pontos),pontosTotal:Math.max(0,(d.pontosTotal||0)+t.pontos)});await registrarHistorico({nome:d.nome,pontos:t.pontos,motivo:t.tipo,obs:t.prova})}}
+    window.rejeitarTarefa=async function(tarefaId){if(!adminAtivo)return;await updateDoc(doc(db,'tarefas',tarefaId),{status:'rejeitada'})}
+    window.excluirDesbravador=async function(id){if(!adminAtivo)return;if(!confirm('Excluir este desbravador?'))return;await deleteDoc(doc(db,'desbravadores',id))}
+    window.zerarMes=async function(){if(!adminAtivo)return;if(!confirm('Zerar a pontuação mensal de todos?'))return;for(const d of desbravadores){await updateDoc(doc(db,'desbravadores',d.id),{pontosMes:0})}}
+
+    function preencherSelects(){
+      const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));
+      const op='<option value="">Selecione seu nome</option>'+ordenados.map((d,i)=>`<option value="${d.id}">${i+1}º • ${d.nome} (${d.equipe})</option>`).join('');
+      desbravadorPontuacao.innerHTML=op;desbravadorTarefa.innerHTML=op;
+      const opP=tiposPontuacao.map((t,i)=>`<option value="${i}">${t.nome} (${t.pontos>0?'+':''}${t.pontos})</option>`).join('');
+      tipoPontuacao.innerHTML=opP;tipoTarefa.innerHTML=opP;
+    }
+
+    function renderizar(){
+      preencherSelects();
+      const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});premioMes.innerHTML=`🎁 ${mes}<br>Prêmio: ${premios[new Date().getMonth()%premios.length]}`;
+      const ordenados=[...desbravadores].sort((a,b)=>(b.pontosMes||0)-(a.pontosMes||0));const lider=ordenados[0];liderAtual.innerText=lider&&lider.pontosMes>0?`👑 ${lider.nome} • ${lider.pontosMes} pts no mês`:'Ainda sem pontuação';
       listaAdmins.innerHTML=adminsVisuais.map(a=>`<div class="player"><div class="avatar">${a.foto?`<img src="${a.foto}">`:'👑'}</div><div><b>${a.nome}</b><br><span class="tag purple">Administrador</span></div></div>`).join('')||'<p class="small">Nenhum administrador cadastrado.</p>';
-      historico.innerHTML=historico.slice(0,30).map(h=>`<p class="small">${h.data} — <b>${h.nome}</b>: ${h.pontos>0?'+':''}${h.pontos} pts • ${h.motivo}${h.obs?' • '+h.obs:''}</p>`).join('')||'<p class="small">Ainda sem histórico.</p>'}
-    renderizar();
+      tarefasExtrasAtivas.innerHTML=tarefasExtras.map(extra=>`<div class="task"><div class="avatar">🔥</div><div><b>${extra.titulo}</b><br><span class="tag extra">Extra máxima</span><p>${extra.descricao}</p><p class="small">Vale ${extra.pontos} pontos • Criada em ${extra.data||''}</p></div><div><button onclick="enviarTarefaExtra('${extra.id}')">Cumpri essa tarefa</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa extra publicada ainda.</p>';
+      extrasAdmin.innerHTML=tarefasExtras.map(extra=>`<p class="small">🔥 <b>${extra.titulo}</b> — ${extra.pontos} pts <button class="danger" onclick="removerExtra('${extra.id}')">Remover</button></p>`).join('')||'<p class="small">Nenhuma tarefa extra criada.</p>';
+      const max=Math.max(1,...desbravadores.map(d=>d.pontosMes||0));grafico.innerHTML=ordenados.map(d=>{const nivel=nivelDe(d.pontosTotal||0).atual,largura=Math.max(4,((d.pontosMes||0)/max)*100);return`<div class="chart-row"><div class="chart-label"><b>${nivel.emoji} ${d.nome}</b><span>${d.pontosMes||0} pts</span></div><div class="ranking-bar"><div class="fill" style="width:${largura}%"></div></div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
+      ranking.innerHTML=ordenados.map((d,i)=>{const nivel=nivelDe(d.pontosTotal||0),atual=nivel.atual,proximo=nivel.proximo,progresso=proximo?Math.min(100,(((d.pontosTotal||0)-atual.pontos)/(proximo.pontos-atual.pontos))*100):100;return`<div class="player"><div class="avatar">${d.foto?`<img src="${d.foto}" alt="${d.nome}">`:'🧭'}</div><div><b>${i+1}º ${d.nome}</b><br><span class="tag">${d.cargo}</span><span class="tag team">${d.equipe}</span><span class="tag">${atual.emoji} ${atual.nome}</span><p class="small">Mês: ${d.pontosMes||0} pts • Total: ${d.pontosTotal||0} pts • ${textoProximoNivel(d.pontosTotal||0)}</p><div class="ranking-bar"><div class="fill" style="width:${progresso}%"></div></div></div><div>${adminAtivo?`<button class="danger" onclick="excluirDesbravador('${d.id}')">Excluir</button>`:''}</div></div>`}).join('')||'<p>Nenhum desbravador cadastrado.</p>';
+      const pontosEquipes={};desbravadores.forEach(d=>{pontosEquipes[d.equipe]=(pontosEquipes[d.equipe]||0)+(d.pontosMes||0)});rankingEquipes.innerHTML=Object.entries(pontosEquipes).sort((a,b)=>b[1]-a[1]).map((e,i)=>`<p>${i+1}º <b>${e[0]}</b> — ${e[1]} pts</p>`).join('')||'<p>Nenhuma equipe ainda.</p>';
+      tarefasPendentes.innerHTML=tarefas.filter(t=>t.status==='pendente').map(t=>`<div class="task"><div class="avatar">📌</div><div><b>${t.nome}</b><br><span class="tag pending">Pendente</span><p class="small">${t.tipo} • ${t.pontos>0?'+':''}${t.pontos} pts</p><p>${t.prova}</p><p class="small">${t.data||''}</p></div><div><button onclick="aprovarTarefa('${t.id}')">Aprovar</button><button class="danger" onclick="rejeitarTarefa('${t.id}')">Rejeitar</button></div></div>`).join('')||'<p class="small">Nenhuma tarefa pendente.</p>';
+      historico.sort((a,b)=>(b.criadoEm?.seconds||0)-(a.criadoEm?.seconds||0));historico.innerHTML=historico.slice(0,30).map(h=>`<p class="small">${h.data||''} — <b>${h.nome}</b>: ${h.pontos>0?'+':''}${h.pontos} pts • ${h.motivo}${h.obs?' • '+h.obs:''}</p>`).join('')||'<p class="small">Ainda sem histórico.</p>';
+    }
+    ouvirDados();renderizar();
   </script>
 </body>
-  
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  setDoc,
-  doc,
-  updateDoc,
-  deleteDoc
-} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAzG5c9OOkuqc88HKpCNE4QySyelqKUWIM",
-  authDomain: "unidade-ruben.firebaseapp.com",
-  projectId: "unidade-ruben",
-  storageBucket: "unidade-ruben.firebasestorage.app",
-  messagingSenderId: "979369641231",
-  appId: "1:979369641231:web:6f9def3cda6f5a3986ea7a"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-window.db = db;
-window.firebaseFirestore = {
-  collection,
-  addDoc,
-  getDocs,
-  setDoc,
-  doc,
-  updateDoc,
-  deleteDoc
-};
-
-console.log("Firebase conectado!");
-</script>
-  
 </html>
