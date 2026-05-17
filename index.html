@@ -10,7 +10,7 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
     body{min-height:100vh;background:radial-gradient(circle at top,#312e81,#020617 70%);color:white;padding:16px}
-    .app{max-width:1100px;margin:auto}.hero{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);border-radius:28px;padding:28px;text-align:center;box-shadow:0 0 35px #38bdf8;margin-bottom:20px}.hero h1{font-size:34px;text-shadow:0 0 14px #000}.hero p{font-size:18px;margin-top:8px}
+    .app{max-width:1100px;margin:auto}.hero{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);border-radius:28px;padding:22px;text-align:center;box-shadow:0 0 35px #38bdf8;margin-bottom:20px}.hero-top{display:grid;grid-template-columns:92px 1fr 92px;gap:14px;align-items:center}.hero-logo{width:88px;height:88px;border-radius:22px;object-fit:cover;background:#0f172a;border:3px solid #fff;box-shadow:0 0 18px #fff}.hero h1{font-size:34px;text-shadow:0 0 14px #000}.hero p{font-size:18px;margin-top:8px}@media(max-width:800px){.hero-top{grid-template-columns:70px 1fr 70px}.hero-logo{width:66px;height:66px;border-radius:16px}}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:rgba(15,23,42,.94);border:2px solid #38bdf8;border-radius:22px;padding:18px;box-shadow:0 0 18px #38bdf855;margin-bottom:16px}h2{margin-bottom:14px;color:#e0f2fe}input,select,textarea{width:100%;padding:13px;border:0;border-radius:13px;margin:5px 0;font-size:15px}textarea{min-height:70px}
     button{border:0;border-radius:13px;padding:12px 14px;font-weight:800;color:white;background:linear-gradient(135deg,#22c55e,#16a34a);cursor:pointer;margin:5px 4px 5px 0;box-shadow:0 0 12px #22c55e66}.danger{background:#ef4444}.blue{background:#2563eb}.gold{background:#f59e0b;color:#111827}.purple{background:#7c3aed}.gray{background:#475569}
     .player,.task{display:grid;grid-template-columns:80px 1fr auto;gap:12px;background:#111827;border:1px solid #38bdf866;border-radius:16px;padding:13px;margin:10px 0;align-items:center}.avatar{width:70px;height:70px;border-radius:18px;object-fit:cover;background:#0f172a;border:2px solid #38bdf8;display:flex;align-items:center;justify-content:center;font-size:32px}.xp{color:#22c55e;font-weight:900}.tag{font-size:12px;background:#1e40af;border-radius:999px;padding:4px 8px;display:inline-block;margin:3px 3px 0 0}.pending{background:#f59e0b;color:#111827}.done{background:#16a34a}.rejected{background:#ef4444}.team{background:#7c3aed}
@@ -20,7 +20,7 @@
 </head>
 <body>
 <main class="app">
-  <section class="hero"><h1>🎮🔥 UNIDADE RÚBEN 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Gamer</p></section>
+  <section class="hero"><div class="hero-top"><img class="hero-logo" src="logo-clube.png" alt="Logo do Clube"><div><h1>🎮🔥 UNIDADE RÚBEM 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Gamer</p></div><img class="hero-logo" src="logo-unidade.png" alt="Logo da Unidade"></div></section>
 
   <section class="card"><h2>🔐 Acesso</h2><div class="grid"><select id="loginType"><option value="desbravador">Desbravador</option><option value="admin">Administrador</option></select><input id="adminPass" placeholder="Senha do administrador"></div><button onclick="login()">Entrar</button><button class="danger" onclick="logout()">Sair do Admin</button><p class="small">Senha padrão admin: <b>ruben123</b>. Desbravadores visualizam ranking e enviam tarefas.</p></section>
 
