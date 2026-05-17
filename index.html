@@ -10,105 +10,40 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
     body{min-height:100vh;background:radial-gradient(circle at top,#312e81,#020617 70%);color:white;padding:16px}
-    .app{max-width:1050px;margin:auto}
-    .hero{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);border-radius:28px;padding:28px;text-align:center;box-shadow:0 0 35px #38bdf8;margin-bottom:20px}
-    .hero h1{font-size:34px;text-shadow:0 0 14px #000}.hero p{font-size:18px;margin-top:8px}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:rgba(15,23,42,.94);border:2px solid #38bdf8;border-radius:22px;padding:18px;box-shadow:0 0 18px #38bdf855;margin-bottom:16px}
-    h2{margin-bottom:14px;color:#e0f2fe}input,select,textarea{width:100%;padding:13px;border:0;border-radius:13px;margin:5px 0;font-size:15px}textarea{min-height:70px}
-    button{border:0;border-radius:13px;padding:12px 14px;font-weight:800;color:white;background:linear-gradient(135deg,#22c55e,#16a34a);cursor:pointer;margin:5px 4px 5px 0;box-shadow:0 0 12px #22c55e66}.danger{background:#ef4444}.blue{background:#2563eb}.gold{background:#f59e0b;color:#111827}.purple{background:#7c3aed}
-    .player,.task{display:grid;grid-template-columns:1fr auto;gap:10px;background:#111827;border:1px solid #38bdf866;border-radius:16px;padding:13px;margin:10px 0}.xp{color:#22c55e;font-weight:900}.tag{font-size:12px;background:#1e40af;border-radius:999px;padding:4px 8px;display:inline-block;margin-top:4px}.pending{background:#f59e0b;color:#111827}.done{background:#16a34a}.rejected{background:#ef4444}
-    .ranking-bar{height:14px;background:#0f172a;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22c55e,#38bdf8,#facc15)}
-    .small{font-size:13px;opacity:.82}.premio{background:linear-gradient(135deg,#facc15,#f97316);color:#111827;border-radius:18px;padding:16px;text-align:center;font-weight:900;font-size:20px}.admin-area{display:none}.admin-on .admin-area{display:block}.admin-on .lock-msg{display:none}.month-winner{font-size:22px;color:#facc15;font-weight:900}.chart-row{margin:12px 0}.chart-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
-    @media(max-width:800px){.grid{grid-template-columns:1fr}.hero h1{font-size:28px}.player,.task{grid-template-columns:1fr}}
+    .app{max-width:1100px;margin:auto}.hero{background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);border-radius:28px;padding:28px;text-align:center;box-shadow:0 0 35px #38bdf8;margin-bottom:20px}.hero h1{font-size:34px;text-shadow:0 0 14px #000}.hero p{font-size:18px;margin-top:8px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:rgba(15,23,42,.94);border:2px solid #38bdf8;border-radius:22px;padding:18px;box-shadow:0 0 18px #38bdf855;margin-bottom:16px}h2{margin-bottom:14px;color:#e0f2fe}input,select,textarea{width:100%;padding:13px;border:0;border-radius:13px;margin:5px 0;font-size:15px}textarea{min-height:70px}
+    button{border:0;border-radius:13px;padding:12px 14px;font-weight:800;color:white;background:linear-gradient(135deg,#22c55e,#16a34a);cursor:pointer;margin:5px 4px 5px 0;box-shadow:0 0 12px #22c55e66}.danger{background:#ef4444}.blue{background:#2563eb}.gold{background:#f59e0b;color:#111827}.purple{background:#7c3aed}.gray{background:#475569}
+    .player,.task{display:grid;grid-template-columns:80px 1fr auto;gap:12px;background:#111827;border:1px solid #38bdf866;border-radius:16px;padding:13px;margin:10px 0;align-items:center}.avatar{width:70px;height:70px;border-radius:18px;object-fit:cover;background:#0f172a;border:2px solid #38bdf8;display:flex;align-items:center;justify-content:center;font-size:32px}.xp{color:#22c55e;font-weight:900}.tag{font-size:12px;background:#1e40af;border-radius:999px;padding:4px 8px;display:inline-block;margin:3px 3px 0 0}.pending{background:#f59e0b;color:#111827}.done{background:#16a34a}.rejected{background:#ef4444}.team{background:#7c3aed}
+    .ranking-bar{height:16px;background:#0f172a;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22c55e,#38bdf8,#facc15);transition:.5s}.small{font-size:13px;opacity:.85}.premio{background:linear-gradient(135deg,#facc15,#f97316);color:#111827;border-radius:18px;padding:16px;text-align:center;font-weight:900;font-size:20px}.admin-area{display:none}.admin-on .admin-area{display:block}.month-winner{font-size:22px;color:#facc15;font-weight:900}.chart-row{margin:12px 0}.chart-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}.level-card{border-left:5px solid #facc15}.sound{display:none}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}.hero h1{font-size:28px}.player,.task{grid-template-columns:1fr}.avatar{width:90px;height:90px}}
   </style>
 </head>
 <body>
-<main class="app" id="app">
-  <section class="hero">
-    <h1>🎮🔥 UNIDADE RÚBEN 🔥🎮</h1>
-    <p>Campeonato Anual • XP de Honra • Tarefas Automáticas</p>
-  </section>
+<main class="app">
+  <section class="hero"><h1>🎮🔥 UNIDADE RÚBEN 🔥🎮</h1><p>Campeonato Anual • XP de Honra • Ranking Gamer</p></section>
 
-  <section class="card">
-    <h2>🔐 Acesso</h2>
-    <div class="grid">
-      <select id="loginType"><option value="desbravador">Desbravador</option><option value="admin">Administrador</option></select>
-      <input id="adminPass" placeholder="Senha do administrador">
-    </div>
-    <button onclick="login()">Entrar</button><button class="danger" onclick="logout()">Sair do Admin</button>
-    <p class="small">Desbravadores podem ver e enviar tarefas. Somente administradores pontuam e aprovam.</p>
-  </section>
+  <section class="card"><h2>🔐 Acesso</h2><div class="grid"><select id="loginType"><option value="desbravador">Desbravador</option><option value="admin">Administrador</option></select><input id="adminPass" placeholder="Senha do administrador"></div><button onclick="login()">Entrar</button><button class="danger" onclick="logout()">Sair do Admin</button><p class="small">Senha padrão admin: <b>ruben123</b>. Desbravadores visualizam ranking e enviam tarefas.</p></section>
 
-  <section class="card admin-area">
-    <h2>👑 Gerenciar Administradores</h2>
-    <div class="grid"><input id="newAdmin" placeholder="Nome do novo administrador"><input id="newPass" placeholder="Senha"></div>
-    <button onclick="addAdmin()">Adicionar administrador</button>
-    <div id="adminsList"></div>
-  </section>
+  <section class="card admin-area"><h2>👑 Administradores</h2><div class="grid"><input id="newAdmin" placeholder="Nome do novo administrador"><input id="newPass" placeholder="Senha"></div><button onclick="addAdmin()">Adicionar administrador</button><div id="adminsList"></div></section>
 
   <section class="grid">
-    <div class="card admin-area">
-      <h2>➕ Cadastrar participante</h2>
-      <input id="name" placeholder="Nome do desbravador">
-      <select id="role"><option>Desbravador</option><option>Diretoria</option><option>Conselheiro</option><option>Apoio</option></select>
-      <button onclick="addPlayer()">Adicionar</button>
-    </div>
-
-    <div class="card">
-      <h2>🏆 Premiação do mês</h2>
-      <div class="premio" id="premioMes"></div>
-      <p class="small" style="margin-top:10px">Prêmio para quem tiver mais pontos no mês.</p>
-    </div>
+    <div class="card admin-area"><h2>➕ Cadastrar Desbravador</h2><input id="name" placeholder="Nome"><select id="team"><option>Equipe Azul</option><option>Equipe Laranja</option><option>Equipe Verde</option><option>Equipe Vermelha</option></select><select id="role"><option>Desbravador</option><option>Diretoria</option><option>Conselheiro</option><option>Apoio</option></select><input id="photo" placeholder="Link da foto opcional"><button onclick="addPlayer()">Cadastrar</button></div>
+    <div class="card"><h2>🏆 Premiação do mês</h2><div class="premio" id="premioMes"></div><p class="small" style="margin-top:10px">Prêmio para o maior pontuador mensal.</p></div>
   </section>
 
-  <section class="card">
-    <h2>✅ Tarefas automáticas para Desbravadores</h2>
-    <p class="small">Todos podem enviar tarefas. Elas ficam pendentes até um administrador aprovar.</p>
-    <div class="grid">
-      <select id="taskPlayer"></select>
-      <select id="taskType"></select>
-    </div>
-    <textarea id="taskProof" placeholder="Escreva uma prova/observação da tarefa. Exemplo: fiz a atividade do caderno, participei do evento, vendi marmitas..."></textarea>
-    <button onclick="sendTask()">Enviar tarefa para aprovação</button>
-  </section>
+  <section class="card"><h2>✅ Tarefas automáticas</h2><p class="small">Todos podem enviar. Somente administradores aprovam e liberam os pontos.</p><div class="grid"><select id="taskPlayer"></select><select id="taskType"></select></div><textarea id="taskProof" placeholder="Prova/observação: fiz a atividade, participei do evento, vendi marmitas..."></textarea><button onclick="sendTask()">Enviar tarefa para aprovação</button></section>
 
-  <section class="card admin-area">
-    <h2>📥 Aprovar tarefas enviadas</h2>
-    <div id="pendingTasks"></div>
-  </section>
+  <section class="card admin-area"><h2>📥 Aprovar tarefas</h2><div id="pendingTasks"></div></section>
 
-  <section class="card admin-area">
-    <h2>🎯 Lançar Pontuação Manual</h2>
-    <div class="grid">
-      <select id="playerSelect"></select>
-      <select id="pointsType"></select>
-    </div>
-    <input id="obs" placeholder="Observação do administrador">
-    <button onclick="addPoints()">Adicionar pontos manualmente</button>
-  </section>
+  <section class="card admin-area"><h2>🎯 Lançar Pontuação Manual</h2><div class="grid"><select id="playerSelect"></select><select id="pointsType"></select></div><input id="obs" placeholder="Observação do administrador"><button onclick="addPoints()">Adicionar pontos</button><button class="danger" onclick="resetMonth()">Zerar mês</button></section>
 
-  <section class="card">
-    <h2>📊 Gráfico profissional de pontos</h2>
-    <div id="chart"></div>
-  </section>
-
-  <section class="card">
-    <h2>🥇 Campeão atual</h2>
-    <div id="champion" class="month-winner">Ainda sem pontuação</div>
-  </section>
-
-  <section class="card">
-    <h2>🏅 Ranking Geral</h2>
-    <p class="lock-msg small">Modo desbravador: ranking e tarefas liberados. Pontuação só aparece para administradores.</p>
-    <div id="ranking"></div>
-  </section>
-
-  <section class="card">
-    <h2>📜 Histórico de Pontuação</h2>
-    <div id="history"></div>
-  </section>
+  <section class="card"><h2>📊 Gráfico profissional de pontos</h2><div id="chart"></div></section>
+  <section class="card level-card"><h2>🥇 Líder atual</h2><div id="champion" class="month-winner">Ainda sem pontuação</div></section>
+  <section class="card"><h2>🏅 Ranking Geral</h2><div id="ranking"></div></section>
+  <section class="card"><h2>👥 Ranking por Equipes</h2><div id="teamsRanking"></div></section>
+  <section class="card"><h2>📜 Histórico de Pontuação</h2><div id="history"></div></section>
 </main>
-
+<audio id="winSound" class="sound"><source src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" type="audio/mpeg"></audio>
 <script>
 let players=JSON.parse(localStorage.getItem('ruben_players'))||[];
 let admins=JSON.parse(localStorage.getItem('ruben_admins'))||[{name:'Administrador Principal',pass:'ruben123'}];
@@ -116,40 +51,32 @@ let history=JSON.parse(localStorage.getItem('ruben_history'))||[];
 let tasks=JSON.parse(localStorage.getItem('ruben_tasks'))||[];
 let isAdmin=false;
 const premios=['Arganel','Sorvete para a unidade','Chocolate','Caixa de bombom','Medalha simbólica','Brinde surpresa'];
-const tipos=[
-  {name:'Presença na reunião',pts:10},
-  {name:'Atividade do caderno de classe',pts:15},
-  {name:'Participação em evento',pts:20},
-  {name:'Venda de marmitas',pts:25},
-  {name:'Bom comportamento',pts:15},
-  {name:'Participação nas atividades',pts:15},
-  {name:'Ajuda na unidade',pts:20},
-  {name:'Verso bíblico decorado',pts:10},
-  {name:'Destaque especial',pts:30},
-  {name:'Atraso / falta de compromisso',pts:-10}
-];
+const tipos=[{name:'Presença na reunião',pts:10},{name:'Atividade do caderno de classe',pts:15},{name:'Participação em evento',pts:20},{name:'Venda de marmitas',pts:25},{name:'Bom comportamento',pts:15},{name:'Participação nas atividades',pts:15},{name:'Ajuda na unidade',pts:20},{name:'Verso bíblico decorado',pts:10},{name:'Destaque especial',pts:30},{name:'Atraso / falta de compromisso',pts:-10}];
+const levels=[['Iniciante',0,'🌱'],['Bronze',50,'🥉'],['Ouro',120,'🥇'],['Platina',220,'💠'],['Diamante',350,'💎'],['Conquistador de Honra',500,'🏆'],['Mestre da Unidade',700,'👑']];
 function save(){localStorage.setItem('ruben_players',JSON.stringify(players));localStorage.setItem('ruben_admins',JSON.stringify(admins));localStorage.setItem('ruben_history',JSON.stringify(history));localStorage.setItem('ruben_tasks',JSON.stringify(tasks));}
-function mesAtual(){return new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});}
-function premioAtual(){return premios[new Date().getMonth()%premios.length];}
+function mesAtual(){return new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});}function premioAtual(){return premios[new Date().getMonth()%premios.length];}
+function getLevel(xp){let atual=levels[0],next=null;for(let i=0;i<levels.length;i++){if(xp>=levels[i][1])atual=levels[i];else{next=levels[i];break}}return {name:atual[0],min:atual[1],icon:atual[2],next};}
+function missingXP(xp){const l=getLevel(xp);return l.next?`${l.next[1]-xp} pts para ${l.next[0]}`:'Nível máximo alcançado';}
 function login(){const type=document.getElementById('loginType').value;const pass=document.getElementById('adminPass').value;if(type==='admin'){const ok=admins.find(a=>a.pass===pass);if(!ok)return alert('Senha de administrador incorreta.');isAdmin=true;document.body.classList.add('admin-on');}else{isAdmin=false;document.body.classList.remove('admin-on');}render();}
 function logout(){isAdmin=false;document.body.classList.remove('admin-on');render();}
-function addAdmin(){const name=document.getElementById('newAdmin').value.trim();const pass=document.getElementById('newPass').value.trim();if(!name||!pass)return alert('Digite nome e senha.');admins.push({name,pass});document.getElementById('newAdmin').value='';document.getElementById('newPass').value='';save();render();}
-function addPlayer(){const name=document.getElementById('name').value.trim();const role=document.getElementById('role').value;if(!name)return alert('Digite o nome.');players.push({name,role,total:0,month:0});document.getElementById('name').value='';save();render();}
-function addPoints(){const idx=document.getElementById('playerSelect').value;if(idx==='')return alert('Escolha um participante.');const sel=document.getElementById('pointsType');const pts=parseInt(sel.value);const tipo=sel.options[sel.selectedIndex].text;const obs=document.getElementById('obs').value.trim();applyPoints(idx,pts,tipo,obs,'manual');document.getElementById('obs').value='';}
-function applyPoints(idx,pts,tipo,obs,origem){players[idx].total=(players[idx].total||0)+pts;players[idx].month=(players[idx].month||0)+pts;history.unshift({name:players[idx].name,pts,tipo,obs,origem,date:new Date().toLocaleString('pt-BR')});save();render();}
-function sendTask(){const idx=document.getElementById('taskPlayer').value;if(idx==='')return alert('Escolha seu nome.');const taskIdx=document.getElementById('taskType').value;const proof=document.getElementById('taskProof').value.trim();if(!proof)return alert('Escreva uma observação/prova da tarefa.');tasks.unshift({playerIndex:Number(idx),playerName:players[idx].name,type:tipos[taskIdx].name,pts:tipos[taskIdx].pts,proof,status:'pending',date:new Date().toLocaleString('pt-BR')});document.getElementById('taskProof').value='';save();render();alert('Tarefa enviada! Aguarde aprovação do administrador.');}
-function approveTask(i){const t=tasks[i];const idx=players.findIndex(p=>p.name===t.playerName);if(idx>=0){applyPoints(idx,t.pts,t.type,t.proof,'tarefa aprovada');tasks[i].status='approved';save();render();}}
+function addAdmin(){let name=newAdmin.value.trim(),pass=newPass.value.trim();if(!name||!pass)return alert('Digite nome e senha.');admins.push({name,pass});newAdmin.value='';newPass.value='';save();render();}
+function addPlayer(){let n=name.value.trim();if(!n)return alert('Digite o nome.');players.push({name:n,role:role.value,team:team.value,photo:photo.value.trim(),total:0,month:0});name.value='';photo.value='';save();render();}
+function applyPoints(idx,pts,tipo,obs,origem){let oldLevel=getLevel(players[idx].total||0).name;players[idx].total=(players[idx].total||0)+pts;players[idx].month=(players[idx].month||0)+pts;let newLevel=getLevel(players[idx].total||0).name;if(newLevel!==oldLevel&&pts>0){document.getElementById('winSound').play().catch(()=>{});alert(`🎉 ${players[idx].name} subiu para ${newLevel}!`)}history.unshift({name:players[idx].name,pts,tipo,obs,origem,date:new Date().toLocaleString('pt-BR')});save();render();}
+function addPoints(){let idx=playerSelect.value;if(idx==='')return alert('Escolha um participante.');let sel=pointsType,pts=parseInt(sel.value),tipo=sel.options[sel.selectedIndex].text;applyPoints(idx,pts,tipo,obs.value.trim(),'manual');obs.value='';}
+function sendTask(){let idx=taskPlayer.value;if(idx==='')return alert('Escolha seu nome.');let ti=taskType.value,proof=taskProof.value.trim();if(!proof)return alert('Escreva uma observação/prova da tarefa.');tasks.unshift({playerName:players[idx].name,type:tipos[ti].name,pts:tipos[ti].pts,proof,status:'pending',date:new Date().toLocaleString('pt-BR')});taskProof.value='';save();render();alert('Tarefa enviada! Aguarde aprovação.');}
+function approveTask(i){let t=tasks[i],idx=players.findIndex(p=>p.name===t.playerName);if(idx>=0){tasks[i].status='approved';applyPoints(idx,t.pts,t.type,t.proof,'tarefa aprovada');}else alert('Participante não encontrado.');}
 function rejectTask(i){tasks[i].status='rejected';save();render();}
 function removePlayer(i){if(confirm('Excluir participante?')){players.splice(i,1);save();render();}}
-function render(){players.sort((a,b)=>(b.month||0)-(a.month||0));document.getElementById('premioMes').innerHTML=`🎁 ${mesAtual()}<br>Prêmio: ${premioAtual()}`;document.getElementById('champion').innerText=players[0]&&players[0].month>0?`👑 ${players[0].name} • ${players[0].month} pontos no mês`:'Ainda sem pontuação';
-['playerSelect','taskPlayer'].forEach(id=>{document.getElementById(id).innerHTML=players.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('')});
-['pointsType','taskType'].forEach(id=>{document.getElementById(id).innerHTML=tipos.map((t,i)=>`<option value="${id==='pointsType'?t.pts:i}">${t.name} (${t.pts>0?'+':''}${t.pts})</option>`).join('')});
-document.getElementById('adminsList').innerHTML=admins.map(a=>`<p class='small'>👑 ${a.name}</p>`).join('');
-let max=Math.max(1,...players.map(p=>p.month||0));document.getElementById('chart').innerHTML=players.map(p=>{let w=Math.max(4,((p.month||0)/max)*100);return `<div class='chart-row'><div class='chart-label'><b>${p.name}</b><span>${p.month||0} pts</span></div><div class='ranking-bar'><div class='fill' style='width:${w}%'></div></div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
-document.getElementById('ranking').innerHTML=players.map((p,i)=>`<div class='player'><div><b>${i+1}º ${p.name}</b><br><span class='tag'>${p.role}</span><p class='small'>Mensal: ${p.month||0} pts • Geral: ${p.total||0} pts</p></div><div>${isAdmin?`<button class='danger' onclick='removePlayer(${i})'>Excluir</button>`:''}</div></div>`).join('')||'<p>Nenhum participante cadastrado.</p>';
-document.getElementById('pendingTasks').innerHTML=tasks.filter(t=>t.status==='pending').map((t,i)=>{let realIndex=tasks.indexOf(t);return `<div class='task'><div><b>${t.playerName}</b><br><span class='tag pending'>Pendente</span><p class='small'>${t.type} • ${t.pts>0?'+':''}${t.pts} pts</p><p>${t.proof}</p><p class='small'>${t.date}</p></div><div><button onclick='approveTask(${realIndex})'>Aprovar</button><button class='danger' onclick='rejectTask(${realIndex})'>Rejeitar</button></div></div>`}).join('')||'<p class="small">Nenhuma tarefa pendente.</p>';
-document.getElementById('history').innerHTML=(history.slice(0,25).map(h=>`<p class='small'>${h.date} — <b>${h.name}</b>: ${h.pts>0?'+':''}${h.pts} pts • ${h.tipo}${h.obs?' • '+h.obs:''}</p>`).join(''))||'<p class="small">Ainda sem histórico.</p>';
-}
+function resetMonth(){if(confirm('Zerar pontuação mensal?')){players.forEach(p=>p.month=0);save();render();}}
+function render(){players.sort((a,b)=>(b.month||0)-(a.month||0));premioMes.innerHTML=`🎁 ${mesAtual()}<br>Prêmio: ${premioAtual()}`;champion.innerText=players[0]&&players[0].month>0?`👑 ${players[0].name} • ${players[0].month} pts no mês • ${getLevel(players[0].total||0).icon} ${getLevel(players[0].total||0).name}`:'Ainda sem pontuação';
+['playerSelect','taskPlayer'].forEach(id=>document.getElementById(id).innerHTML=players.map((p,i)=>`<option value="${i}">${p.name}</option>`).join(''));
+['pointsType','taskType'].forEach(id=>document.getElementById(id).innerHTML=tipos.map((t,i)=>`<option value="${id==='pointsType'?t.pts:i}">${t.name} (${t.pts>0?'+':''}${t.pts})</option>`).join(''));
+adminsList.innerHTML=admins.map(a=>`<p class='small'>👑 ${a.name}</p>`).join('');let max=Math.max(1,...players.map(p=>p.month||0));
+chart.innerHTML=players.map(p=>{let w=Math.max(4,((p.month||0)/max)*100),l=getLevel(p.total||0);return `<div class='chart-row'><div class='chart-label'><b>${l.icon} ${p.name}</b><span>${p.month||0} pts</span></div><div class='ranking-bar'><div class='fill' style='width:${w}%'></div></div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
+ranking.innerHTML=players.map((p,i)=>{let l=getLevel(p.total||0),next=l.next?Math.min(100,((p.total-l.min)/(l.next[1]-l.min))*100):100;return `<div class='player'><div class='avatar'>${p.photo?`<img src='${p.photo}' class='avatar'>`:'🧭'}</div><div><b>${i+1}º ${p.name}</b><br><span class='tag'>${p.role}</span><span class='tag team'>${p.team||'Sem equipe'}</span><span class='tag'>${l.icon} ${l.name}</span><p class='small'>Mensal: ${p.month||0} pts • Geral: ${p.total||0} pts • ${missingXP(p.total||0)}</p><div class='ranking-bar'><div class='fill' style='width:${next}%'></div></div></div><div>${isAdmin?`<button class='danger' onclick='removePlayer(${i})'>Excluir</button>`:''}</div></div>`}).join('')||'<p>Nenhum participante cadastrado.</p>';
+let teams={};players.forEach(p=>teams[p.team||'Sem equipe']=(teams[p.team||'Sem equipe']||0)+(p.month||0));teamsRanking.innerHTML=Object.entries(teams).sort((a,b)=>b[1]-a[1]).map((t,i)=>`<p>${i+1}º <b>${t[0]}</b> — ${t[1]} pts</p>`).join('')||'<p>Nenhuma equipe ainda.</p>';
+pendingTasks.innerHTML=tasks.filter(t=>t.status==='pending').map(t=>{let i=tasks.indexOf(t);return `<div class='task'><div class='avatar'>📌</div><div><b>${t.playerName}</b><br><span class='tag pending'>Pendente</span><p class='small'>${t.type} • ${t.pts>0?'+':''}${t.pts} pts</p><p>${t.proof}</p><p class='small'>${t.date}</p></div><div><button onclick='approveTask(${i})'>Aprovar</button><button class='danger' onclick='rejectTask(${i})'>Rejeitar</button></div></div>`}).join('')||'<p class="small">Nenhuma tarefa pendente.</p>';
+history.innerHTML=(history.slice(0,30).map(h=>`<p class='small'>${h.date} — <b>${h.name}</b>: ${h.pts>0?'+':''}${h.pts} pts • ${h.tipo}${h.obs?' • '+h.obs:''}</p>`).join(''))||'<p class="small">Ainda sem histórico.</p>'}
 render();
 </script>
 </body>
