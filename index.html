@@ -130,14 +130,17 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
     import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAzG5c9OOkuqc88HKpCNE4QySyelqKUWIM",
-      authDomain: "unidade-ruben.firebaseapp.com",
-      projectId: "unidade-ruben",
-      storageBucket: "unidade-ruben.firebasestorage.app",
-      messagingSenderId: "979369641231",
-      appId: "1:979369641231:web:6f9def3cda6f5a3986ea7a"
-    };
+  const firebaseConfig = {
+  apiKey: "AIzaSyAzG5c9OOkuqc88HKpCNE4QySyelqKUWIM",
+  authDomain: "unidade-ruben.firebaseapp.com",
+  projectId: "unidade-ruben",
+  storageBucket: "unidade-ruben.firebasestorage.app",
+  messagingSenderId: "979369641231",
+  appId: "1:979369641231:web:6f9def3cda6f5a3986ea7a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
